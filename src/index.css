@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+/* AuraBeat design tokens. Use as Tailwind utilities: bg-stage, text-ink-muted, border-aura, etc. */
+@theme {
+  --color-stage: #080b10;
+  --color-surface: #131a23;
+  --color-surface-raised: #1a2330;
+  --color-ink: #f4f7fa;
+  --color-ink-muted: #a8b5c5;
+  --color-aura: #7cf7d4;
+  --color-anticipate: #ffc66d;
+  --color-alert: #ff7a85;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --animate-aura-drift: aura-drift 18s ease-in-out infinite alternate;
+  --animate-rise: rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+
+  @keyframes aura-drift {
+    0% { transform: translate3d(-6%, -4%, 0) scale(1); }
+    100% { transform: translate3d(6%, 5%, 0) scale(1.12); }
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-stage text-ink font-sans antialiased;
+    min-height: 100dvh;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-aura);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+/* Reduced motion: the OS preference is honored here; the in-app toggle (later phase)
+   sets data-reduced-motion on <html> and gets the same treatment. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+html[data-reduced-motion="true"] *,
+html[data-reduced-motion="true"] *::before,
+html[data-reduced-motion="true"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
