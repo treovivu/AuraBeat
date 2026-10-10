@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "dev:lab": "AURABEAT_HTTPS=1 vite --port 5175",
+    "dev:watch": "AURABEAT_HUB_PORT=0 vite --host :: --port 5173 --strictPort",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview"

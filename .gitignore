@@ -28,3 +28,6 @@ dist-ssr
 
 # Wave Lab motion recordings (local tuning data)
 lab-data/
+.venv/
+xcuserdata/
+__pycache__/

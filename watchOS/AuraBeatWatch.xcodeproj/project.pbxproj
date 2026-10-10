@@ -1,0 +1,283 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		AB0000000000000000000101 /* AuraBeatWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000001 /* AuraBeatWatchApp.swift */; };
+		AB0000000000000000000102 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000002 /* ContentView.swift */; };
+		AB0000000000000000000103 /* WatchSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000003 /* WatchSession.swift */; };
+		AB0000000000000000000104 /* RelayConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000004 /* RelayConfig.swift */; };
+		AB0000000000000000000105 /* MotionDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000005 /* MotionDetector.swift */; };
+		AB0000000000000000000106 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000006 /* HapticManager.swift */; };
+		AB0000000000000000000107 /* WatchWebSocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0000000000000000000007 /* WatchWebSocketClient.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		AB0000000000000000000001 /* AuraBeatWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuraBeatWatchApp.swift; sourceTree = "<group>"; };
+		AB0000000000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		AB0000000000000000000003 /* WatchSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSession.swift; sourceTree = "<group>"; };
+		AB0000000000000000000004 /* RelayConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelayConfig.swift; sourceTree = "<group>"; };
+		AB0000000000000000000005 /* MotionDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionDetector.swift; sourceTree = "<group>"; };
+		AB0000000000000000000006 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
+		AB0000000000000000000007 /* WatchWebSocketClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWebSocketClient.swift; sourceTree = "<group>"; };
+		AB0000000000000000000008 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AB0000000000000000000009 /* SETUP.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = SETUP.md; sourceTree = "<group>"; };
+		AB0000000000000000000010 /* AuraBeatWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AuraBeatWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		AB0000000000000000000201 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		AB0000000000000000000301 = {
+			isa = PBXGroup;
+			children = (
+				AB0000000000000000000302 /* AuraBeatWatch */,
+				AB0000000000000000000303 /* Shared */,
+				AB0000000000000000000304 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		AB0000000000000000000302 /* AuraBeatWatch */ = {
+			isa = PBXGroup;
+			children = (
+				AB0000000000000000000001 /* AuraBeatWatchApp.swift */,
+				AB0000000000000000000002 /* ContentView.swift */,
+				AB0000000000000000000003 /* WatchSession.swift */,
+				AB0000000000000000000004 /* RelayConfig.swift */,
+				AB0000000000000000000008 /* Info.plist */,
+				AB0000000000000000000009 /* SETUP.md */,
+			);
+			path = AuraBeatWatch;
+			sourceTree = "<group>";
+		};
+		AB0000000000000000000303 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				AB0000000000000000000005 /* MotionDetector.swift */,
+				AB0000000000000000000006 /* HapticManager.swift */,
+				AB0000000000000000000007 /* WatchWebSocketClient.swift */,
+			);
+			name = Shared;
+			sourceTree = "<group>";
+		};
+		AB0000000000000000000304 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AB0000000000000000000010 /* AuraBeatWatch.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AB0000000000000000000401 /* AuraBeatWatch */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AB0000000000000000000602 /* Build configuration list for PBXNativeTarget "AuraBeatWatch" */;
+			buildPhases = (
+				AB0000000000000000000501 /* Sources */,
+				AB0000000000000000000201 /* Frameworks */,
+				AB0000000000000000000502 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AuraBeatWatch;
+			productName = AuraBeatWatch;
+			productReference = AB0000000000000000000010 /* AuraBeatWatch.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		AB0000000000000000000701 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2700;
+				LastUpgradeCheck = 2700;
+			};
+			buildConfigurationList = AB0000000000000000000601 /* Build configuration list for PBXProject "AuraBeatWatch" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = AB0000000000000000000301;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = AB0000000000000000000304 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AB0000000000000000000401 /* AuraBeatWatch */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AB0000000000000000000502 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AB0000000000000000000501 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AB0000000000000000000101 /* AuraBeatWatchApp.swift in Sources */,
+				AB0000000000000000000102 /* ContentView.swift in Sources */,
+				AB0000000000000000000103 /* WatchSession.swift in Sources */,
+				AB0000000000000000000104 /* RelayConfig.swift in Sources */,
+				AB0000000000000000000105 /* MotionDetector.swift in Sources */,
+				AB0000000000000000000106 /* HapticManager.swift in Sources */,
+				AB0000000000000000000107 /* WatchWebSocketClient.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		AB0000000000000000000801 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
+			};
+			name = Debug;
+		};
+		AB0000000000000000000802 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
+			};
+			name = Release;
+		};
+		AB0000000000000000000803 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AuraBeatWatch/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = AuraBeat;
+				INFOPLIST_KEY_NSMotionUsageDescription = "AuraBeat detects your wave to the music.";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vungoctrieuvy.AuraBeatWatch;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,4";
+				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
+			};
+			name = Debug;
+		};
+		AB0000000000000000000804 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = AuraBeatWatch/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = AuraBeat;
+				INFOPLIST_KEY_NSMotionUsageDescription = "AuraBeat detects your wave to the music.";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKWatchOnly = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_IPHONEOS_DEPLOYMENT_TARGET)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vungoctrieuvy.AuraBeatWatch;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,4";
+				WATCHOS_DEPLOYMENT_TARGET = "$(RECOMMENDED_WATCHOS_DEPLOYMENT_TARGET)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AB0000000000000000000601 /* Build configuration list for PBXProject "AuraBeatWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AB0000000000000000000801 /* Debug */,
+				AB0000000000000000000802 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AB0000000000000000000602 /* Build configuration list for PBXNativeTarget "AuraBeatWatch" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AB0000000000000000000803 /* Debug */,
+				AB0000000000000000000804 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = AB0000000000000000000701 /* Project object */;
+}

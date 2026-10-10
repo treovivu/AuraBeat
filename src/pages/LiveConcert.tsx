@@ -15,8 +15,13 @@ interface LiveConcertProps {
   onExit: () => void;
 }
 
-/** The backend's live event WebSocket, when configured (see liveBridge.ts for the message format). */
-const LIVE_WS_URL = import.meta.env.VITE_LIVE_WS_URL as string | undefined;
+/**
+ * The backend's live event WebSocket (see liveBridge.ts for the message format). In development the dev
+ * server hosts the lightstick hub itself, fed by tools/live_lightstick.py.
+ */
+const liveWsUrl = (): string | undefined =>
+  (import.meta.env.VITE_LIVE_WS_URL as string | undefined) ??
+  (import.meta.env.DEV ? `${location.protocol === "https:" ? "wss" : "ws"}://${location.host}/ws?role=app&session=demo` : undefined);
 
 /**
  * Live Concert: the real stage is the show, so the phone stays minimal — a synchronized lightstick,
@@ -32,7 +37,10 @@ export default function LiveConcert({ onExit }: LiveConcertProps) {
   const session = useLiveSession(settings);
   const [lightstickOpen, setLightstickOpen] = useState(false);
 
-  useEffect(() => (LIVE_WS_URL ? connectLiveBackend(LIVE_WS_URL) : undefined), []);
+  useEffect(() => {
+    const url = liveWsUrl();
+    return url ? connectLiveBackend(url) : undefined;
+  }, []);
 
   const start = () => {
     session.start();
@@ -126,6 +134,20 @@ export default function LiveConcert({ onExit }: LiveConcertProps) {
             onChange={() => toggle("cues")}
           />
         </section>
+
+        {/* Standalone lightstick page (public/lightstick.html) that follows the backend's shared cues */}
+        <a
+          href={`${import.meta.env.BASE_URL}lightstick.html`}
+          className="flex min-h-16 items-center justify-between gap-3 rounded-3xl border border-white/10 bg-surface px-5 py-3 transition hover:border-aura/60"
+        >
+          <span>
+            <span className="block font-display text-lg font-bold">Shared lightstick</span>
+            <span className="block text-sm text-ink-muted">Connect to the venue backend and glow with the crowd.</span>
+          </span>
+          <span aria-hidden="true" className="text-2xl text-aura">
+            →
+          </span>
+        </a>
       </div>
 
       {lightstickOpen && session.active && (

@@ -1,0 +1,1491 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+  <meta name="theme-color" content="#080b10">
+  <title>AuraBeat — Live Lightstick</title>
+  <link id="favicon" rel="icon" type="image/svg+xml">
+
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: "Avenir Next", "Trebuchet MS", sans-serif;
+      background: #080b10;
+      color: #f4f7fa;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px 16px calc(24px + env(safe-area-inset-bottom));
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      min-height: 48px;
+      padding: 12px 16px;
+      border: 1px solid #334154;
+      border-radius: 14px;
+      background: #17202c;
+      color: #f4f7fa;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    button:focus-visible,
+    input:focus-visible {
+      outline: 3px solid #7cf7d4;
+      outline-offset: 4px;
+    }
+
+    main {
+      max-width: 580px;
+      margin: auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .brand {
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+    }
+
+    .brand span {
+      color: #7cf7d4;
+    }
+
+    .tag {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: #a8b5c5;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+      letter-spacing: -1px;
+    }
+
+    p {
+      color: #a8b5c5;
+      line-height: 1.5;
+      margin: 8px 0;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #a8b5c5;
+    }
+
+    .setup {
+      border: 1px solid #283344;
+      border-radius: 20px;
+      padding: 18px;
+      background: #101720;
+      margin: 20px 0 14px;
+    }
+
+    input[type="url"] {
+      width: 100%;
+      min-height: 48px;
+      margin: 8px 0 12px;
+      padding: 10px;
+      background: #080b10;
+      color: #f4f7fa;
+      border: 1px solid #334154;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .row button {
+      flex: 1;
+    }
+
+    #status {
+      margin: 12px 0;
+      font-size: 14px;
+      color: #ffc66d;
+      min-height: 22px;
+    }
+
+    .stick {
+      position: relative;
+      min-height: 580px;
+      margin-top: 16px;
+      overflow: hidden;
+      border-radius: 28px;
+      border: 1px solid #283344;
+      background: #101720;
+      isolation: isolate;
+    }
+
+    #color {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: #526b65;
+      opacity: 0;
+      transition:
+        background-color 4000ms linear,
+        opacity 350ms ease;
+    }
+
+    .stick.on #color {
+      opacity: 1;
+    }
+
+    .bottom-panel {
+      position: absolute;
+      z-index: 1;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      padding: 14px;
+      border: 1px solid #ffffff26;
+      border-radius: 18px;
+      background: #080b10e6;
+    }
+
+    #cue {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    #detail {
+      font-size: 12px;
+      margin-top: 4px;
+      color: #c0cad6;
+      line-height: 1.4;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .controls button {
+      flex: 1;
+    }
+
+    #toggle {
+      background: #7cf7d4;
+      border-color: #7cf7d4;
+      color: #071b16;
+    }
+
+    #toggle[aria-pressed="true"] {
+      background: #222d3b;
+      border-color: #66788f;
+      color: #f4f7fa;
+    }
+
+    .options {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      margin-top: 8px;
+      color: #d4dce6;
+    }
+
+    .options input {
+      width: 22px;
+      height: 22px;
+      margin: 0;
+      accent-color: #7cf7d4;
+    }
+
+    .haptics {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #ffffff1a;
+    }
+
+    #testHaptic {
+      width: 100%;
+      min-height: 44px;
+      margin-top: 4px;
+    }
+
+    #hapticStatus {
+      margin-top: 8px;
+      font-size: 12px;
+      line-height: 1.4;
+      color: #c0cad6;
+    }
+
+    .metrics {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .metric {
+      flex: 1;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid #283344;
+    }
+
+    .metric span {
+      display: block;
+      color: #a8b5c5;
+      font-size: 12px;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 20px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .diag {
+      margin-top: 16px;
+      padding: 12px 14px;
+      border: 1px dashed #ffc66d80;
+      border-radius: 14px;
+      font-size: 12px;
+    }
+
+    .diag h2 {
+      margin: 0 0 8px;
+      font-size: 13px;
+      color: #ffc66d;
+    }
+
+    .diag dl {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 4px 10px;
+      margin: 0;
+    }
+
+    .diag dt {
+      color: #a8b5c5;
+    }
+
+    .diag dd {
+      margin: 0;
+      font-variant-numeric: tabular-nums;
+      overflow-wrap: anywhere;
+    }
+
+    body.expanded .diag {
+      display: none;
+    }
+
+    footer {
+      margin-top: 18px;
+      color: #a8b5c5;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    body.expanded {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    body.expanded header,
+    body.expanded .intro,
+    body.expanded .setup,
+    body.expanded #status,
+    body.expanded .metrics,
+    body.expanded footer {
+      display: none;
+    }
+
+    body.expanded main {
+      max-width: none;
+    }
+
+    body.expanded .stick {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      margin: 0;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      min-height: 0;
+      border: 0;
+      border-radius: 0;
+    }
+
+    body.expanded .bottom-panel {
+      bottom: calc(12px + env(safe-area-inset-bottom));
+      left: max(12px, env(safe-area-inset-left));
+      right: max(12px, env(safe-area-inset-right));
+      max-height: 70dvh;
+      overflow-y: auto;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #color {
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <header>
+      <a class="brand" href="./" style="color: inherit; text-decoration: none">aura<span>beat</span></a>
+      <div class="tag">Live lightstick</div>
+    </header>
+
+    <section class="intro">
+      <h1>One crowd. One rhythm.</h1>
+      <p>Slow ambient blends. Sharp rhythmic color. Your choice.</p>
+    </section>
+
+    <form id="connectForm" class="setup">
+      <label for="backend">Backend address</label>
+      <input
+        id="backend"
+        type="url"
+        required
+        spellcheck="false"
+        autocapitalize="off"
+        autocomplete="off"
+        aria-describedby="addressHelp"
+      >
+      <p id="addressHelp">
+        On your phone, use the laptop’s network address—not localhost.
+      </p>
+      <div class="row">
+        <button type="submit">Connect</button>
+        <button type="button" id="disconnect">Disconnect</button>
+      </div>
+    </form>
+
+    <div id="status" role="status">Disconnected</div>
+
+    <section class="stick" id="stick" aria-label="Lightstick display">
+      <div id="color" aria-hidden="true"></div>
+
+      <div class="bottom-panel">
+        <div id="cue">Lightstick off</div>
+        <div id="detail">Connect, then turn on.</div>
+
+        <div class="controls">
+          <button
+            id="toggle"
+            type="button"
+            disabled
+            aria-pressed="false"
+          >
+            Turn lightstick on
+          </button>
+
+          <button
+            id="expand"
+            type="button"
+            aria-pressed="false"
+          >
+            Expand
+          </button>
+        </div>
+
+        <label class="options">
+          <input type="checkbox" id="steady">
+          Steady color / reduced motion
+        </label>
+
+        <!-- Optional phone haptics: a separate musical-onset stream, independent of the lighting. -->
+        <div class="haptics" role="group" aria-label="Phone vibrations">
+          <label class="options">
+            <input type="checkbox" id="phoneHaptics" autocomplete="off">
+            Phone vibrations — optional
+          </label>
+          <button id="testHaptic" type="button">Test phone vibration</button>
+          <div id="hapticStatus" role="status" aria-live="polite">Vibrations are off.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="metrics" aria-label="Connection measurements">
+      <div class="metric">
+        <span>Network round-trip</span>
+        <strong id="rtt">—</strong>
+      </div>
+      <div class="metric">
+        <span>Received cues</span>
+        <strong id="received">0</strong>
+      </div>
+    </section>
+
+    <!-- DEBUG (temporary): phone-haptic diagnostics -->
+    <section class="diag" aria-label="Haptics diagnostics">
+      <h2>Haptics diagnostics (temporary)</h2>
+      <dl id="hapticDiag"></dl>
+    </section>
+
+    <footer>
+      Keep this page visible. Soft audio uses slow, muted color blends;
+      energetic audio uses sharp color changes, limited to two per second.
+      Changing lights may cause discomfort. Choose Steady color or turn
+      the lightstick off. Network RTT is not display latency.
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const $ = id => document.getElementById(id);
+
+      const SESSION = "demo";
+      const DISPLAY_BUFFER_MS = 350;
+      const LATE_TOLERANCE_MS = 120;
+      const MAX_PENDING_CUES = 64;
+      const STEADY_COLOR = "#526B65";
+
+      const allowedKinds = new Set([
+        "beat",
+        "bass",
+        "percussion",
+        "drop",
+        "get_ready",
+        "wave"
+      ]);
+
+      const sourcePalette = [
+        "#7CF7D4",
+        "#79B8FF",
+        "#C7AAFF",
+        "#F3B49B",
+        "#F4D78B"
+      ];
+
+      const softPalette = [
+        "#526B65",
+        "#52627A",
+        "#695B79",
+        "#795F65",
+        "#796B53"
+      ];
+
+      const energeticPalette = [
+        "#009F9A",
+        "#2868D8",
+        "#8747D1",
+        "#CD4692",
+        "#CF8526"
+      ];
+
+      const fallbackIndexes = {
+        beat: 0,
+        bass: 3,
+        percussion: 1,
+        drop: 4,
+        get_ready: 4,
+        wave: 2
+      };
+
+      const icon =
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">' +
+        '<rect width="32" height="32" rx="8" fill="#080b10"/>' +
+        '<path d="M8 13v6m8-12v18m8-14v10" stroke="#7cf7d4" ' +
+        'stroke-width="4" stroke-linecap="round"/></svg>';
+
+      $("favicon").href =
+        "data:image/svg+xml," + encodeURIComponent(icon);
+
+      // The AuraBeat dev server hosts the backend too, so the page's own origin is the backend.
+      let defaultAddress = "http://localhost:8000";
+
+      if (location.protocol === "http:" || location.protocol === "https:") {
+        defaultAddress = location.origin;
+      }
+
+      $("backend").value =
+        new URLSearchParams(location.search).get("backend") ||
+        defaultAddress;
+
+      const motionPreference =
+        window.matchMedia("(prefers-reduced-motion: reduce)");
+
+      $("steady").checked = motionPreference.matches;
+
+      let ws = null;
+      let wanted = false;
+      let active = false;
+      let ready = false;
+      let playbackAllowed = true;
+
+      let reconnectTimer = null;
+      let heartbeatTimer = null;
+      let connectionTimer = null;
+      let retryDelay = 1000;
+      let socketUrl = "";
+
+      let pendingPing = null;
+      let offset = null;
+      let samples = [];
+      let lastRtt = null;
+
+      let received = 0;
+      let lastPaint = -Infinity;
+      let newestPaintedSentAt = -Infinity;
+
+      const scheduled = new Set();
+      const seen = new Set();
+
+      // Phone haptics: musical-onset cues on their own "haptic" messages. They never touch the lighting,
+      // and they play as soon as they arrive (no display buffer).
+      const phoneCanVibrate = typeof navigator.vibrate === "function";
+      const PHONE_HAPTIC_MIN_GAP_MS = 250;
+      const PHONE_HAPTIC_MIN_MS = 30;
+      const PHONE_HAPTIC_MAX_MS = 100;
+      const PHONE_HAPTIC_EARLIEST_MS = -100; // clock-estimate slack for "from the future"
+      const PHONE_HAPTIC_LATEST_MS = 500; // older than this would no longer feel on the beat
+      const PHONE_HAPTIC_SEEN_LIMIT = 256;
+      const phoneHapticBaseMs = {
+        beat: 45,
+        bass: 80,
+        build: 55,
+        chorus: 65,
+        drop: 100
+      }; // "none" → no vibration
+
+      const phoneHapticSeen = new Set();
+      let lastPhoneHapticAt = -Infinity;
+      let phoneHapticsPlayed = 0;
+      // Set by the first vibration request, so cancelling never calls the API before the user acts.
+      let phoneVibrationUsed = false;
+      // Server time of the latest stop/reset; haptics sent before it are dropped.
+      let sessionBarrierAt = -Infinity;
+
+      function reducedMotionEnabled() {
+        return $("steady").checked || motionPreference.matches;
+      }
+
+      function send(type, payload) {
+        if (!ws || ws.readyState !== WebSocket.OPEN) return false;
+
+        try {
+          ws.send(JSON.stringify({
+            type,
+            session: SESSION,
+            payload
+          }));
+          return true;
+        } catch {
+          ws.close();
+          return false;
+        }
+      }
+
+      function clearScheduled() {
+        for (const timer of scheduled) {
+          clearTimeout(timer);
+        }
+        scheduled.clear();
+      }
+
+      function updateToggle() {
+        $("toggle").disabled =
+          !active && (!ready || !playbackAllowed);
+
+        $("toggle").textContent = active
+          ? "Turn lightstick off"
+          : "Turn lightstick on";
+
+        $("toggle").setAttribute("aria-pressed", String(active));
+        $("stick").classList.toggle("on", active);
+
+        updateHapticStatus();
+      }
+
+      function turnOff(message = "Lightstick is off.") {
+        active = false;
+        clearScheduled();
+        cancelPhoneVibration();
+
+        $("color").style.transition = "none";
+        $("cue").textContent = "Lightstick off";
+        $("detail").textContent = message;
+
+        updateToggle();
+      }
+
+      function resetConnectionState(message) {
+        ready = false;
+        offset = null;
+        pendingPing = null;
+        samples = [];
+        lastRtt = null;
+        playbackAllowed = true;
+        newestPaintedSentAt = -Infinity;
+
+        seen.clear();
+        phoneHapticSeen.clear();
+        sessionBarrierAt = -Infinity;
+        clearInterval(heartbeatTimer);
+        clearTimeout(connectionTimer);
+
+        heartbeatTimer = null;
+        connectionTimer = null;
+
+        $("rtt").textContent = "—";
+        $("status").textContent = message;
+
+        turnOff(message + " Turn on again after connecting.");
+      }
+
+      function stopConnection(message = "Disconnected") {
+        wanted = false;
+        clearTimeout(reconnectTimer);
+        reconnectTimer = null;
+
+        const old = ws;
+        ws = null;
+
+        if (old) {
+          old.onopen = null;
+          old.onmessage = null;
+          old.onclose = null;
+          old.onerror = null;
+          old.close();
+        }
+
+        resetConnectionState(message);
+      }
+
+      function queueReconnect() {
+        if (!wanted) return;
+
+        clearTimeout(reconnectTimer);
+        reconnectTimer = setTimeout(openSocket, retryDelay);
+        retryDelay = Math.min(retryDelay * 2, 8000);
+      }
+
+      function failConnection(connection, message) {
+        if (ws !== connection) return;
+
+        ws = null;
+        connection.onopen = null;
+        connection.onmessage = null;
+        connection.onclose = null;
+        connection.onerror = null;
+        connection.close();
+
+        resetConnectionState(message);
+        queueReconnect();
+      }
+
+      function ping() {
+        if (!ws || ws.readyState !== WebSocket.OPEN) return;
+
+        if (pendingPing) {
+          if (performance.now() - pendingPing.mono > 8000) {
+            failConnection(ws, "Connection timed out · retrying…");
+          }
+          return;
+        }
+
+        pendingPing = {
+          wall: Date.now(),
+          mono: performance.now()
+        };
+
+        if (!send("ping", {
+          client_time: pendingPing.wall,
+          last_rtt_ms: lastRtt,
+          clock_offset_ms: offset
+        })) {
+          pendingPing = null;
+        }
+      }
+
+      function receivePong(payload) {
+        if (
+          !pendingPing ||
+          payload.client_time !== pendingPing.wall ||
+          !Number.isFinite(payload.server_time)
+        ) {
+          return;
+        }
+
+        const rtt = performance.now() - pendingPing.mono;
+        const estimatedOffset =
+          payload.server_time - (pendingPing.wall + rtt / 2);
+
+        pendingPing = null;
+
+        if (rtt < 0 || rtt > 5000) return;
+
+        samples.push({ rtt, offset: estimatedOffset });
+        samples = samples.slice(-8);
+
+        const best = samples.reduce(
+          (a, b) => a.rtt < b.rtt ? a : b
+        );
+
+        offset = best.offset;
+        lastRtt = rtt;
+        ready = true;
+        retryDelay = 1000;
+
+        $("rtt").textContent = `${Math.round(rtt)} ms`;
+        $("status").textContent = playbackAllowed
+          ? "Connected · shared demo session"
+          : "Connected · playback paused";
+
+        updateToggle();
+      }
+
+      function showSteadyColor() {
+        $("color").style.transition = "none";
+        $("color").style.backgroundColor = STEADY_COLOR;
+
+        if (active) {
+          $("cue").textContent = "Steady light";
+          $("detail").textContent =
+            "Changing colors disabled · shared connection remains active";
+        }
+      }
+
+      function scaleColor(hex, factor) {
+        return "#" + [1, 3, 5].map(start => {
+          const channel = parseInt(hex.slice(start, start + 2), 16);
+          return Math.round(channel * factor)
+            .toString(16)
+            .padStart(2, "0");
+        }).join("");
+      }
+
+      function displayCue(payload, sentAt) {
+        if (
+          !active ||
+          !ready ||
+          !playbackAllowed ||
+          document.hidden
+        ) {
+          return;
+        }
+
+        if (sentAt < newestPaintedSentAt) return;
+
+        const now = performance.now();
+        if (now - lastPaint < 500) return;
+
+        lastPaint = now;
+        newestPaintedSentAt = sentAt;
+
+        if (reducedMotionEnabled()) {
+          showSteadyColor();
+          return;
+        }
+
+        const intensity = Number.isFinite(payload.intensity)
+          ? Math.max(0, Math.min(1, payload.intensity))
+          : 0;
+
+        const supplied = typeof payload.color === "string"
+          ? payload.color.toUpperCase()
+          : "";
+
+        const found = sourcePalette.indexOf(supplied);
+        const index = found >= 0
+          ? found
+          : (fallbackIndexes[payload.kind] ?? 0);
+
+        const energetic = intensity > 0.55;
+        const palette = energetic
+          ? energeticPalette
+          : softPalette;
+
+        const brightness = energetic
+          ? 0.8 + intensity * 0.2
+          : 0.55 + intensity * 0.6;
+
+        $("color").style.transition = energetic
+          ? "background-color 0ms linear, opacity 250ms ease"
+          : "background-color 4000ms linear, opacity 700ms ease";
+
+        $("color").style.backgroundColor =
+          scaleColor(palette[index], brightness);
+
+        $("cue").textContent = energetic
+          ? "Following the beat"
+          : "Soft ambience";
+
+        $("detail").textContent = energetic
+          ? "Sharp color changes · shared audio"
+          : "Slow, muted color blends · shared audio";
+      }
+
+      function receiveCue(message, receivedAt) {
+        const payload = message.payload;
+
+        if (
+          !payload ||
+          typeof payload.cue_id !== "string" ||
+          seen.has(payload.cue_id)
+        ) {
+          return;
+        }
+
+        seen.add(payload.cue_id);
+        if (seen.size > 256) {
+          seen.delete(seen.values().next().value);
+        }
+
+        received += 1;
+        $("received").textContent = String(received);
+
+        // ACK timestamps represent message receipt, not physical screen output.
+        if (offset !== null) {
+          send("ack", {
+            cue_id: payload.cue_id,
+            received_at: receivedAt
+          });
+        }
+
+        if (
+          !active ||
+          !ready ||
+          !playbackAllowed ||
+          document.hidden ||
+          !allowedKinds.has(payload.kind) ||
+          !Number.isFinite(message.sent_at)
+        ) {
+          return;
+        }
+
+        const estimatedServerNow = Date.now() + offset;
+        const delay =
+          message.sent_at + DISPLAY_BUFFER_MS - estimatedServerNow;
+
+        if (
+          delay < -LATE_TOLERANCE_MS ||
+          delay > 5000 ||
+          scheduled.size >= MAX_PENDING_CUES
+        ) {
+          return;
+        }
+
+        const deadline = performance.now() + Math.max(0, delay);
+
+        const timer = setTimeout(() => {
+          scheduled.delete(timer);
+
+          if (
+            performance.now() - deadline > LATE_TOLERANCE_MS
+          ) {
+            return;
+          }
+
+          displayCue(payload, message.sent_at);
+        }, Math.max(0, delay));
+
+        scheduled.add(timer);
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function setHapticStatus(text) {
+        $("hapticStatus").textContent = text;
+      }
+
+      function updateHapticStatus() {
+        if (!phoneCanVibrate) {
+          setHapticStatus(
+            "This browser does not offer phone vibrations. Lighting still works."
+          );
+        } else if (!$("phoneHaptics").checked) {
+          setHapticStatus("Available to test. Vibrations are off.");
+        } else if (!active) {
+          setHapticStatus(
+            "Enabled. Turn the lightstick on to receive musical haptics."
+          );
+        } else {
+          setHapticStatus(
+            phoneHapticsPlayed > 0
+              ? "Receiving musical haptic requests."
+              : "Enabled. Waiting for musical haptic requests…"
+          );
+        }
+      }
+
+      // The return value only says the browser accepted the request, not that the phone moved.
+      // DEBUG (temporary): diagnostics for the phone-haptic path, shown in the panel and the console.
+      const hapticDiag = {
+        received: 0,
+        lastCue: "—",
+        lastReject: "—",
+        lastResult: "—"
+      };
+
+      function renderHapticDiag() {
+        const rows = [
+          ["navigator.vibrate available", phoneCanVibrate],
+          ["document.hidden", document.hidden],
+          ["phone haptics enabled", $("phoneHaptics").checked],
+          ["active (lightstick on)", active],
+          ["ready", ready],
+          ["playbackAllowed", playbackAllowed],
+          ["server clock available", offset !== null
+            ? `yes (offset ${Math.round(offset)} ms)`
+            : "no"],
+          ["haptic messages received", hapticDiag.received],
+          ["last haptic cue", hapticDiag.lastCue],
+          ["last rejection reason", hapticDiag.lastReject],
+          ["last navigator.vibrate result", hapticDiag.lastResult]
+        ];
+        $("hapticDiag").replaceChildren(...rows.flatMap(([label, value]) => {
+          const dt = document.createElement("dt");
+          const dd = document.createElement("dd");
+          dt.textContent = label;
+          dd.textContent = String(value);
+          return [dt, dd];
+        }));
+      }
+
+      // DEBUG (temporary): mirror diagnostics to the dev server log, so they can be read without the phone.
+      function reportDiag(event, detail) {
+        send("diag", {
+          event,
+          detail,
+          ua: navigator.userAgent,
+          vibrate: phoneCanVibrate,
+          hidden: document.hidden,
+          enabled: $("phoneHaptics").checked,
+          active,
+          ready,
+          playbackAllowed,
+          offset: offset === null ? null : Math.round(offset)
+        });
+      }
+
+      function hapticReject(reason, cueId) {
+        hapticDiag.lastReject = `${reason} (cue ${cueId ?? "?"})`;
+        console.log(`REJECT ${reason}`, `cue_id=${cueId ?? "?"}`);
+        reportDiag("reject", `${reason} cue_id=${cueId ?? "?"}`);
+        renderHapticDiag();
+      }
+
+      // The return value only says the browser accepted the request, not that the phone moved.
+      function requestVibration(pattern, label = {}) {
+        if (pattern !== 0) phoneVibrationUsed = true;
+
+        // DEBUG (temporary)
+        if (pattern !== 0) {
+          console.log(
+            "PHONE VIBRATE REQUEST",
+            `duration=${JSON.stringify(pattern)}`,
+            `pattern=${label.pattern ?? "?"}`,
+            `cue_id=${label.cueId ?? "?"}`
+          );
+        }
+
+        let accepted;
+        try {
+          accepted = navigator.vibrate(pattern) !== false;
+        } catch (error) {
+          accepted = false;
+          console.log("PHONE VIBRATE ERROR", String(error));
+        }
+
+        if (pattern !== 0) {
+          console.log("PHONE VIBRATE RESULT", `accepted=${accepted}`);
+          reportDiag("vibrate", `accepted=${accepted} duration=${JSON.stringify(pattern)} cue_id=${label.cueId ?? "?"}`);
+          hapticDiag.lastResult =
+            `accepted=${accepted} (${label.cueId ?? "?"}, ${JSON.stringify(pattern)})`;
+          renderHapticDiag();
+        }
+
+        return accepted;
+      }
+
+      function cancelPhoneVibration() {
+        if (phoneCanVibrate && phoneVibrationUsed) requestVibration(0);
+      }
+
+      function disablePhoneHaptics(message) {
+        $("phoneHaptics").checked = false;
+        cancelPhoneVibration();
+        setHapticStatus(message);
+      }
+
+      function receivePhoneHaptic(message) {
+        const payload = message.payload;
+        const cueId = payload && payload.cue_id;
+
+        // DEBUG (temporary)
+        hapticDiag.received += 1;
+        hapticDiag.lastCue =
+          `${cueId ?? "?"} ${payload && payload.pattern} @ ${new Date().toLocaleTimeString()}`;
+        console.log(
+          "PHONE HAPTIC RECEIVED",
+          `cue_id=${cueId ?? "?"}`,
+          `pattern=${payload && payload.pattern}`
+        );
+
+        if (!payload || typeof payload.cue_id !== "string") {
+          return hapticReject("invalid-cue", cueId);
+        }
+        if (phoneHapticSeen.has(payload.cue_id)) {
+          return hapticReject("duplicate", cueId);
+        }
+
+        phoneHapticSeen.add(payload.cue_id);
+        if (phoneHapticSeen.size > PHONE_HAPTIC_SEEN_LIMIT) {
+          phoneHapticSeen.delete(phoneHapticSeen.values().next().value);
+        }
+
+        const baseMs = phoneHapticBaseMs[payload.pattern];
+
+        if (!phoneCanVibrate) return hapticReject("unsupported-vibration", cueId);
+        if (!$("phoneHaptics").checked) return hapticReject("phone-haptics-disabled", cueId);
+        if (!active) return hapticReject("inactive", cueId);
+        if (!ready) return hapticReject("not-ready", cueId);
+        if (offset === null) return hapticReject("invalid-server-clock", cueId);
+        if (!playbackAllowed) return hapticReject("playback-not-allowed", cueId);
+        if (document.hidden) return hapticReject("page-hidden", cueId);
+        if (!baseMs) {
+          return hapticReject(
+            payload.pattern === "none" ? "pattern-none" : "invalid-cue",
+            cueId
+          );
+        }
+        if (!Number.isFinite(message.sent_at)) {
+          return hapticReject("invalid-server-clock", cueId);
+        }
+        if (message.sent_at <= sessionBarrierAt) {
+          return hapticReject("control-barrier", cueId);
+        }
+
+        const age = Date.now() + offset - message.sent_at;
+        if (age < PHONE_HAPTIC_EARLIEST_MS || age > PHONE_HAPTIC_LATEST_MS) {
+          return hapticReject(
+            `stale (age ${Math.round(age)} ms, allowed ${PHONE_HAPTIC_EARLIEST_MS}…${PHONE_HAPTIC_LATEST_MS})`,
+            cueId
+          );
+        }
+
+        const now = performance.now();
+        if (now - lastPhoneHapticAt < PHONE_HAPTIC_MIN_GAP_MS) {
+          return hapticReject("rate-limited", cueId);
+        }
+        lastPhoneHapticAt = now;
+
+        const intensity = Number.isFinite(payload.intensity)
+          ? clamp(payload.intensity, 0, 1)
+          : 0.5;
+        const requested =
+          Number.isFinite(payload.duration_ms) && payload.duration_ms > 0
+            ? payload.duration_ms
+            : baseMs;
+        const duration = Math.round(
+          clamp(
+            requested * (0.6 + 0.4 * intensity),
+            PHONE_HAPTIC_MIN_MS,
+            PHONE_HAPTIC_MAX_MS
+          )
+        );
+
+        if (requestVibration(duration, { cueId, pattern: payload.pattern })) {
+          phoneHapticsPlayed += 1;
+          hapticDiag.lastReject = "— (last cue played)";
+          updateHapticStatus();
+        } else {
+          setHapticStatus(
+            "Vibration request rejected. Check browser and device settings."
+          );
+        }
+        renderHapticDiag();
+      }
+
+      function receiveMessage(event) {
+        const receivedAt = Date.now();
+        let message;
+
+        try {
+          message = JSON.parse(event.data);
+        } catch {
+          $("status").textContent = "Ignored malformed server message.";
+          return;
+        }
+
+        if (
+          !message ||
+          typeof message !== "object" ||
+          message.v !== 1 ||
+          message.session !== SESSION
+        ) {
+          return;
+        }
+
+        const payload =
+          message.payload && typeof message.payload === "object"
+            ? message.payload
+            : {};
+
+        switch (message.type) {
+          case "welcome":
+            $("status").textContent =
+              "Connected · measuring clock offset…";
+            break;
+
+          case "pong":
+            receivePong(payload);
+            break;
+
+          case "cue":
+            receiveCue(message, receivedAt);
+            break;
+
+          case "haptic":
+            receivePhoneHaptic(message);
+            break;
+
+          case "control":
+            if (
+              payload.action === "stop" ||
+              payload.action === "reset"
+            ) {
+              playbackAllowed = true;
+              newestPaintedSentAt = -Infinity;
+              seen.clear();
+              phoneHapticSeen.clear();
+              if (Number.isFinite(message.sent_at)) {
+                sessionBarrierAt = message.sent_at;
+              }
+              turnOff("Stopped by the server. Turn on to start again.");
+            }
+            break;
+
+          case "playback":
+            clearScheduled();
+            playbackAllowed = payload.state === "playing";
+
+            if (!playbackAllowed) {
+              turnOff("Playback paused or stopped.");
+            }
+
+            $("status").textContent = playbackAllowed
+              ? "Connected · shared demo session"
+              : "Connected · playback paused";
+
+            updateToggle();
+            break;
+
+          case "error":
+            $("status").textContent =
+              "Server: " + String(payload.message || "Unknown error");
+            break;
+        }
+      }
+
+      function openSocket() {
+        if (!wanted) return;
+
+        resetConnectionState("Connecting…");
+
+        let connection;
+
+        try {
+          connection = new WebSocket(socketUrl);
+        } catch {
+          $("status").textContent =
+            "Connection could not start. Check the address.";
+          queueReconnect();
+          return;
+        }
+
+        ws = connection;
+
+        connectionTimer = setTimeout(() => {
+          failConnection(
+            connection,
+            "Could not connect · check backend and Wi-Fi"
+          );
+        }, 10000);
+
+        connection.onopen = () => {
+          if (ws !== connection) return;
+
+          clearTimeout(connectionTimer);
+          connectionTimer = null;
+
+          ping();
+          heartbeatTimer = setInterval(ping, 2000);
+        };
+
+        connection.onmessage = event => {
+          if (ws === connection) {
+            receiveMessage(event);
+          }
+        };
+
+        connection.onerror = () => {
+          failConnection(
+            connection,
+            "Network error · check backend and Wi-Fi"
+          );
+        };
+
+        connection.onclose = () => {
+          if (ws !== connection) return;
+
+          ws = null;
+          resetConnectionState(
+            wanted ? "Connection lost · retrying…" : "Disconnected"
+          );
+
+          queueReconnect();
+        };
+      }
+
+      $("connectForm").addEventListener("submit", event => {
+        event.preventDefault();
+
+        let address;
+
+        try {
+          address = new URL($("backend").value.trim());
+
+          if (
+            !["http:", "https:", "ws:", "wss:"].includes(address.protocol)
+          ) {
+            throw new Error("Use an HTTP, HTTPS, WS, or WSS address.");
+          }
+
+          if (address.username || address.password) {
+            throw new Error("Do not put credentials in the address.");
+          }
+
+          address.protocol =
+            ["https:", "wss:"].includes(address.protocol)
+              ? "wss:"
+              : "ws:";
+
+          if (
+            location.protocol === "https:" &&
+            address.protocol !== "wss:"
+          ) {
+            throw new Error(
+              "An HTTPS page needs a secure WSS backend."
+            );
+          }
+
+          address.pathname = "/ws";
+          address.search = "";
+          address.hash = "";
+          address.searchParams.set("role", "phone");
+          address.searchParams.set("session", SESSION);
+        } catch (error) {
+          $("status").textContent =
+            error.message || "Enter a valid backend address.";
+          return;
+        }
+
+        stopConnection();
+
+        socketUrl = address.toString();
+        wanted = true;
+        retryDelay = 1000;
+        received = 0;
+        $("received").textContent = "0";
+
+        openSocket();
+      });
+
+      $("disconnect").addEventListener("click", () => {
+        stopConnection();
+      });
+
+      $("toggle").addEventListener("click", () => {
+        if (active) {
+          turnOff();
+          return;
+        }
+
+        if (!ready || !playbackAllowed) return;
+
+        active = true;
+        lastPaint = -Infinity;
+        newestPaintedSentAt = -Infinity;
+
+        $("color").style.transition = "none";
+        $("color").style.backgroundColor = STEADY_COLOR;
+        $("cue").textContent = "Ready";
+        $("detail").textContent = "Waiting for shared concert cues…";
+
+        updateToggle();
+
+        if (reducedMotionEnabled()) {
+          showSteadyColor();
+        }
+      });
+
+      $("steady").addEventListener("change", () => {
+        if (reducedMotionEnabled()) {
+          showSteadyColor();
+        } else if (active) {
+          $("cue").textContent = "Ready";
+          $("detail").textContent =
+            "Waiting for the next music cue…";
+        }
+      });
+
+      function handleMotionPreferenceChange() {
+        if (motionPreference.matches) {
+          $("steady").checked = true;
+          showSteadyColor();
+        }
+      }
+
+      if (motionPreference.addEventListener) {
+        motionPreference.addEventListener(
+          "change",
+          handleMotionPreferenceChange
+        );
+      }
+
+      function setExpanded(expanded) {
+        document.body.classList.toggle("expanded", expanded);
+
+        $("expand").textContent = expanded
+          ? "Exit full view"
+          : "Expand";
+
+        $("expand").setAttribute(
+          "aria-pressed",
+          String(expanded)
+        );
+      }
+
+      $("expand").addEventListener("click", async () => {
+        const isExpanded =
+          document.body.classList.contains("expanded");
+
+        if (isExpanded) {
+          setExpanded(false);
+
+          if (
+            document.fullscreenElement &&
+            document.exitFullscreen
+          ) {
+            try {
+              await document.exitFullscreen();
+            } catch {
+              setExpanded(false);
+            }
+          }
+
+          return;
+        }
+
+        setExpanded(true);
+
+        if (document.documentElement.requestFullscreen) {
+          try {
+            await document.documentElement.requestFullscreen();
+          } catch {
+            $("detail").textContent =
+              "Full-window view; browser fullscreen is unavailable.";
+          }
+        }
+      });
+
+      document.addEventListener("fullscreenchange", () => {
+        if (!document.fullscreenElement) {
+          setExpanded(false);
+        }
+      });
+
+      document.addEventListener("keydown", event => {
+        if (
+          event.key === "Escape" &&
+          !document.fullscreenElement
+        ) {
+          setExpanded(false);
+        }
+      });
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          turnOff("Page hidden. Turn on again when you return.");
+
+          if ($("phoneHaptics").checked) {
+            disablePhoneHaptics(
+              "Vibrations are off because the page was hidden. Turn them on again when you return."
+            );
+          }
+        }
+      });
+
+      window.addEventListener("pagehide", () => {
+        stopConnection();
+      });
+
+      // Phone haptics are opt-in: never enabled automatically (also not by form-state restore).
+      $("phoneHaptics").checked = false;
+      $("phoneHaptics").disabled = !phoneCanVibrate;
+      $("testHaptic").disabled = !phoneCanVibrate;
+      updateHapticStatus();
+      renderHapticDiag();
+      setInterval(renderHapticDiag, 500); // DEBUG (temporary)
+
+      $("phoneHaptics").addEventListener("change", () => {
+        if (!$("phoneHaptics").checked) cancelPhoneVibration();
+        updateHapticStatus();
+      });
+
+      // Vibration needs a user gesture on mobile browsers, so the test only runs from this tap.
+      $("testHaptic").addEventListener("click", () => {
+        if (!phoneCanVibrate) return;
+
+        setHapticStatus(
+          requestVibration([60, 60, 60], { cueId: "test", pattern: "test" })
+            ? "Test requested. Confirm physically that you felt the vibration."
+            : "Vibration request rejected. Check browser and device settings."
+        );
+      });
+
+      // Connect right away; the form stays available to switch backends.
+      $("connectForm").requestSubmit();
+    })();
+  </script>
+</body>
+</html>
