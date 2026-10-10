@@ -10,6 +10,11 @@ interface PerformanceMediaProps {
   onMediaError?: () => void;
   /** Shown when no media is configured (e.g. the development mock performance). */
   placeholder?: ReactNode;
+  /**
+   * A presentation drawn over the performance (e.g. the virtual stage). The media element stays
+   * mounted and playing underneath, so it remains the sound and the clock.
+   */
+  scene?: ReactNode;
   /** Overlaid on top of the performance (title, badges). */
   overlay?: ReactNode;
   /** 0–1 stage-light level around the performance; follows the beat. */
@@ -18,6 +23,8 @@ interface PerformanceMediaProps {
   tone?: StageTone;
   /** 0–1 warm downbeat accent. */
   accent?: number;
+  /** Anticipation before an interaction: the frame edges dim into a soft vignette. Presentation only. */
+  anticipation?: boolean;
   /** True for a moment after the audience moves with the music. */
   activated: boolean;
   /** Changes on each activation so the burst replays. */
@@ -34,10 +41,12 @@ export default function PerformanceMedia({
   muted,
   onMediaError,
   placeholder,
+  scene,
   overlay,
   light,
   tone = "aura",
   accent = 0,
+  anticipation = false,
   activated,
   burstKey,
 }: PerformanceMediaProps) {
@@ -47,7 +56,7 @@ export default function PerformanceMedia({
   const edgeWarm = Math.min(0.6, 0.5 * warmBase + 0.45 * accent);
 
   return (
-    <div className="relative isolate">
+    <div className="relative isolate mx-auto w-full" style={{ maxWidth: "calc(62dvh * 16 / 9)" }}>
       {/* Stage light spilling around the frame — decorative */}
       <div
         aria-hidden="true"
@@ -83,16 +92,24 @@ export default function PerformanceMedia({
         ) : (
           <div className="absolute inset-0 bg-surface">{placeholder}</div>
         )}
+        {scene}
+
+        {/* Anticipation vignette — edges only, the performer stays clear */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 rounded-3xl shadow-[inset_0_0_140px_30px_rgba(0,0,0,0.55)] transition-opacity duration-700"
+          style={{ opacity: anticipation && !activated ? 1 : 0 }}
+        />
 
         {/* Beat lighting: light washing in from the frame edges, plus a thin light rig along the top */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-3xl shadow-[inset_0_0_72px_6px_var(--color-aura)]"
+          className="pointer-events-none absolute inset-0 rounded-3xl shadow-[inset_0_0_72px_6px_var(--color-aura)] will-change-[opacity]"
           style={{ opacity: edgeCool }}
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-3xl shadow-[inset_0_0_72px_6px_var(--color-anticipate)]"
+          className="pointer-events-none absolute inset-0 rounded-3xl shadow-[inset_0_0_72px_6px_var(--color-anticipate)] will-change-[opacity]"
           style={{ opacity: edgeWarm }}
         />
         <div

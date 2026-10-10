@@ -3,7 +3,6 @@ import ScreenHeader from "../components/ScreenHeader";
 import PerformanceMedia from "../components/PerformanceMedia";
 import AuraStage from "../components/AuraStage";
 import LyricsDisplay from "../components/LyricsDisplay";
-import InteractionPrompt from "../components/InteractionPrompt";
 import Lightstick from "../components/Lightstick";
 import PlayerControls from "../components/PlayerControls";
 import SensoryToggle from "../components/SensoryToggle";
@@ -11,6 +10,10 @@ import DevControls, { type BeatTiming } from "../components/DevControls";
 import BeatIndicator from "../components/BeatIndicator";
 import LyricSync from "../components/LyricSync";
 import InteractionTiming from "../components/InteractionTiming";
+import CrowdAtmosphere from "../components/CrowdAtmosphere";
+import AuraEnergy from "../components/AuraEnergy";
+import CinematicInteraction from "../components/CinematicInteraction";
+import VirtualPerformerStage from "../components/VirtualPerformerStage";
 import { activePerformance, activePerformanceId, performances } from "../data/performance";
 import { beatPosition, firstBeatFromAnchor, intensityAt, sectionAt } from "../lib/beat";
 import { isHighEnergy, stageLook, visualPulse } from "../lib/stage";
@@ -23,10 +26,39 @@ import { useSettings } from "../hooks/useSettings";
 import { useBeatSound } from "../hooks/useBeatSound";
 import { useWatchStatus } from "../hooks/useWatchStatus";
 import type { LightstickState } from "../types/concert";
-import type { InteractionCue, LyricLine } from "../types/performance";
+import type { InteractionCue, LyricLine, SectionMood } from "../types/performance";
 
 interface AtHomeConcertProps {
   onExit: () => void;
+}
+
+/** Presentation only: how much each mood adds to the visible energy of the concert. */
+const MOOD_ENERGY: Record<SectionMood, number> = {
+  restrained: 0.75,
+  cool: 0.85,
+  rising: 0.95,
+  anticipation: 0.95,
+  peak: 0.9,
+  finale: 1,
+};
+
+/**
+ * How the performance is presented. Both use the same media element as sound and clock:
+ * "virtual" draws a stylised performer on stage over it, "video" shows the concert video itself.
+ */
+type PerformanceView = "virtual" | "video";
+const VIEW_KEY = "aurabeat.view";
+
+function initialView(): PerformanceView {
+  const fromUrl = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("view") : null;
+  if (fromUrl === "virtual" || fromUrl === "video") return fromUrl;
+  try {
+    const saved = localStorage.getItem(VIEW_KEY);
+    if (saved === "virtual" || saved === "video") return saved;
+  } catch {
+    // Storage unavailable: fall through to the default.
+  }
+  return "virtual";
 }
 
 /** How long the concert stays "activated" after the audience moves with the music. */
@@ -69,6 +101,30 @@ export default function AtHomeConcert({ onExit }: AtHomeConcertProps) {
   const watchStatus = useWatchStatus();
   const sensesId = useId();
   const [sensesOpen, setSensesOpen] = useState(false);
+  const [view, setView] = useState<PerformanceView>(initialView);
+  const chooseView = (next: PerformanceView) => {
+    setView(next);
+    try {
+      localStorage.setItem(VIEW_KEY, next);
+    } catch {
+      // Not persisted; the choice still applies for this visit.
+    }
+  };
+
+  // Stage mode for TVs: the whole concert screen (not just the video) goes full screen, so the cue,
+  // lyrics and lighting stay with the performance.
+  const stageRef = useRef<HTMLDivElement>(null);
+  const canFullscreen = typeof document !== "undefined" && document.fullscreenEnabled;
+  const [fullscreen, setFullscreen] = useState(false);
+  useEffect(() => {
+    const sync = () => setFullscreen(document.fullscreenElement === stageRef.current);
+    document.addEventListener("fullscreenchange", sync);
+    return () => document.removeEventListener("fullscreenchange", sync);
+  }, []);
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) void document.exitFullscreen();
+    else void stageRef.current?.requestFullscreen();
+  };
 
   // Clock: a real performance video is the source of truth; the mock timer runs only without one.
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -170,23 +226,69 @@ export default function AtHomeConcert({ onExit }: AtHomeConcertProps) {
             ? "pulse"
             : "idle";
 
+  // Presentation only — derived from existing state, never used for timing decisions.
+  const energy = Math.round(Math.min(1, intensity * MOOD_ENERGY[section.mood]) * (playing ? 1 : 0.6) * 50) / 50;
+  const crowdBeat =
+    // The crowd only needs the beat while its lightsticks sway (wave, celebration, hooks).
+    playing &&
+    beatIndex >= 0 &&
+    !settings.reducedMotion &&
+    (promptPhase === "wave" || celebrating || isHighEnergy(section.mood))
+      ? beatIndex + beatPhase
+      : -1;
+
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col px-5 py-6 sm:px-8">
+    <div
+      ref={stageRef}
+      className={`relative isolate mx-auto flex min-h-dvh w-full max-w-5xl flex-col px-5 pt-6 pb-[18vh] sm:px-8 sm:pb-[24vh] xl:max-w-7xl ${
+        fullscreen ? "overflow-y-auto bg-stage" : ""
+      }`}
+    >
+      {view === "video" && (
+      <CrowdAtmosphere
+        mood={section.mood}
+        phase={promptPhase}
+        celebrating={celebrating}
+        celebrationKey={celebration ?? undefined}
+        energy={energy}
+        beat={crowdBeat}
+        lit={settings.visuals}
+        reducedMotion={settings.reducedMotion}
+      />
+      )}
       <ScreenHeader label="At-home Concert" onExit={onExit} />
 
-      {/* 1. The performance */}
-      <div className="mt-6">
+      {/* 1. The performance, with the interaction cue staged on it (tablet, desktop, TV) */}
+      <div className="mt-4">
         <PerformanceMedia
           media={hasMedia ? track.media : undefined}
           mediaRef={videoRef}
           muted={!settings.sound}
           onMediaError={() => setMediaFailed(true)}
           light={settings.visuals ? look.level : 0}
-          tone={look.tone}
+          tone={promptPhase === "get-ready" ? "amber" : look.tone}
           accent={settings.visuals ? look.accent : 0}
+          anticipation={settings.visuals && promptPhase === "get-ready"}
           activated={settings.visuals && celebrating}
           burstKey={celebration ?? undefined}
+          scene={
+            view === "virtual" ? (
+              <VirtualPerformerStage
+                mood={section.mood}
+                energy={energy}
+                beatPulse={beatPulse}
+                accent={settings.visuals ? look.accent : 0}
+                beat={playing && beatIndex >= 0 ? beatIndex + beatPhase : -1}
+                phase={promptPhase}
+                celebrating={celebrating}
+                celebrationKey={celebration ?? undefined}
+                lit={settings.visuals}
+                reducedMotion={settings.reducedMotion}
+              />
+            ) : undefined
+          }
           placeholder={
+            view === "virtual" ? undefined : (
             <AuraStage
               beatIndex={beatIndex}
               phase={beatPhase}
@@ -196,14 +298,16 @@ export default function AtHomeConcert({ onExit }: AtHomeConcertProps) {
               enabled={settings.visuals}
               reducedMotion={settings.reducedMotion}
             />
+            )
           }
           overlay={
+            <>
             <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between gap-4 bg-gradient-to-b from-black/60 to-transparent p-4 sm:p-5">
               <div className="min-w-0">
                 <p className="truncate font-display text-base font-bold sm:text-xl">{track.title}</p>
                 <p className="truncate text-xs text-ink-muted sm:text-sm">{track.artist}</p>
               </div>
-              {!hasMedia && (
+              {view === "video" && !hasMedia && (
                 <span className="shrink-0 rounded-full border border-white/15 bg-black/40 px-3 py-1 text-xs whitespace-nowrap text-ink-muted">
                   {track.media
                     ? "Video unavailable · mock clock"
@@ -213,36 +317,71 @@ export default function AtHomeConcert({ onExit }: AtHomeConcertProps) {
                 </span>
               )}
             </div>
+            {/* Stage cue: GET READY / WAVE / success in the lower centre of the performance */}
+            <div className="hidden sm:contents">
+              <CinematicInteraction
+                variant="overlay"
+                phase={promptPhase}
+                celebrating={celebrating}
+                celebrationKey={celebration ?? undefined}
+                lit={settings.visuals}
+                reducedMotion={settings.reducedMotion}
+              />
+            </div>
+            </>
           }
         />
       </div>
 
-      {/* 2. Lyrics and musical context */}
-      <div className="mt-4">
-        {settings.visuals && <BeatIndicator beatIndex={beatIndex} playing={playing} />}
-        <p className="mt-3 text-center text-xs font-semibold tracking-[0.3em] text-ink-muted uppercase">{section.label}</p>
+      {/* 2. Interaction cue under the video on phones, where the video is too small to overlay */}
+      <div className="sm:hidden">
+        <CinematicInteraction
+          variant="inline"
+          phase={promptPhase}
+          celebrating={celebrating}
+          celebrationKey={celebration ?? undefined}
+          lit={settings.visuals}
+          reducedMotion={settings.reducedMotion}
+        />
+      </div>
+
+      {/* 3. Lyrics and musical context */}
+      <div className="mt-3 sm:mt-5">
+        <p className="text-center text-xs font-semibold tracking-[0.3em] text-ink-muted uppercase">{section.label}</p>
         {settings.lyrics && lyrics.length > 0 && (
-          <div className="mt-2">
-            <LyricsDisplay lyrics={lyrics} time={time} />
+          <div className="mt-1">
+            <LyricsDisplay lyrics={lyrics} time={time} energetic={playing && isHighEnergy(section.mood)} />
           </div>
         )}
       </div>
 
-      {/* 3. Interaction prompt, with the phone lightstick */}
-      <div className="mt-4 flex items-center justify-center gap-5 text-center">
+      {/* 4. Stage floor: the Aura Energy ribbon with the phone lightstick standing on it, and the bar count */}
+      <div className="relative mt-1 flex flex-col items-center">
+        {settings.visuals && (
+          <div className="absolute inset-x-0 top-12">
+            <AuraEnergy
+              energy={energy}
+              celebrating={celebrating}
+              celebrationKey={celebration ?? undefined}
+              reducedMotion={settings.reducedMotion}
+            />
+          </div>
+        )}
         <Lightstick
           state={lightstickState}
           pulse={pulse}
           beat={playing && beatIndex >= 0 ? beatIndex + beatPhase : -1}
           reducedMotion={settings.reducedMotion}
         />
-        <div className="min-w-0 flex-1 text-left sm:flex-none sm:min-w-80">
-          <InteractionPrompt phase={promptPhase} celebrating={celebrating} />
-        </div>
+        {settings.visuals && (
+          <div className="mt-2">
+            <BeatIndicator beatIndex={beatIndex} playing={playing} />
+          </div>
+        )}
       </div>
 
-      {/* 4. Controls */}
-      <div className="mt-6 flex flex-col gap-4 pb-6">
+      {/* 5. Controls — on a soft backing so the crowd behind never competes with them */}
+      <div className="relative z-10 -mx-3 mt-6 flex flex-col gap-4 rounded-3xl bg-stage/90 p-3">
         <PlayerControls
           time={time}
           duration={duration}
@@ -253,6 +392,7 @@ export default function AtHomeConcert({ onExit }: AtHomeConcertProps) {
         />
 
         <div>
+          <div className="flex flex-wrap items-center gap-3">
           <button
             type="button"
             aria-expanded={sensesOpen}
@@ -272,6 +412,44 @@ export default function AtHomeConcert({ onExit }: AtHomeConcertProps) {
               <path d="m5 8 5 5 5-5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
+          <div role="group" aria-label="Performance view" className="inline-flex min-h-12 items-center rounded-full border border-white/15 p-1">
+            {(
+              [
+                ["virtual", "Virtual stage"],
+                ["video", "Concert video"],
+              ] as const
+            ).map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                aria-pressed={view === value}
+                onClick={() => chooseView(value)}
+                className={`min-h-10 rounded-full px-4 text-sm font-semibold transition ${
+                  view === value ? "bg-white/10 text-ink" : "text-ink-muted hover:text-ink"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          {canFullscreen && (
+            <button
+              type="button"
+              onClick={toggleFullscreen}
+              aria-pressed={fullscreen}
+              className="inline-flex min-h-12 items-center gap-2 rounded-full border border-white/15 px-5 text-sm font-semibold text-ink transition hover:border-white/40 hover:bg-white/5"
+            >
+              <svg aria-hidden="true" viewBox="0 0 20 20" className="size-4" fill="none" stroke="currentColor" strokeWidth="2">
+                {fullscreen ? (
+                  <path d="M8 3v5H3M12 3v5h5M8 17v-5H3M12 17v-5h5" strokeLinecap="round" strokeLinejoin="round" />
+                ) : (
+                  <path d="M3 8V3h5M17 8V3h-5M3 12v5h5M17 12v5h-5" strokeLinecap="round" strokeLinejoin="round" />
+                )}
+              </svg>
+              {fullscreen ? "Exit full screen" : "Full screen"}
+            </button>
+          )}
+          </div>
 
           {sensesOpen && (
             <section
