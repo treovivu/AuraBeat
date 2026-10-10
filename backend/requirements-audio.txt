@@ -1,0 +1,5 @@
+# Only for analyzing new songs (scripts/analyze_song.py) and live mic mode (scripts/live_audio.py).
+# The Grateful timeline is already generated, so the demo runs without these.
+numpy>=1.26
+librosa>=0.10
+sounddevice>=0.4

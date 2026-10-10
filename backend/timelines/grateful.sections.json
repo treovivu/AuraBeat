@@ -1,0 +1,10 @@
+[
+ {"start": 0, "label": "Intro", "mood": "restrained"},
+ {"start": 11.23, "label": "Verse", "mood": "cool"},
+ {"start": 40, "label": "Build", "mood": "rising"},
+ {"start": 64.03, "label": "Pre-Hook", "mood": "anticipation"},
+ {"start": 76.83, "label": "Hook", "mood": "peak"},
+ {"start": 102.43, "label": "Verse 2", "mood": "cool"},
+ {"start": 127, "label": "Build 2", "mood": "rising"},
+ {"start": 153.63, "label": "Final Hook", "mood": "finale"}
+]

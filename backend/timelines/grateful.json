@@ -1,0 +1,2936 @@
+{
+ "title": "NEFFEX - Grateful",
+ "duration": 182.416,
+ "bpm": 75.03,
+ "sections": [
+  {
+   "start": 0,
+   "label": "Intro",
+   "mood": "restrained"
+  },
+  {
+   "start": 11.23,
+   "label": "Verse",
+   "mood": "cool"
+  },
+  {
+   "start": 40,
+   "label": "Build",
+   "mood": "rising"
+  },
+  {
+   "start": 64.03,
+   "label": "Pre-Hook",
+   "mood": "anticipation"
+  },
+  {
+   "start": 76.83,
+   "label": "Hook",
+   "mood": "peak"
+  },
+  {
+   "start": 102.43,
+   "label": "Verse 2",
+   "mood": "cool"
+  },
+  {
+   "start": 127,
+   "label": "Build 2",
+   "mood": "rising"
+  },
+  {
+   "start": 153.63,
+   "label": "Final Hook",
+   "mood": "finale"
+  }
+ ],
+ "cues": [
+  {
+   "t": 0.85,
+   "kind": "beat",
+   "intensity": 0.42,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 1.277,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 1.65,
+   "kind": "beat",
+   "intensity": 0.42,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 2.485,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 3.249,
+   "kind": "beat",
+   "intensity": 0.43,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 4.049,
+   "kind": "beat",
+   "intensity": 0.44,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 4.481,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 4.849,
+   "kind": "beat",
+   "intensity": 0.44,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 5.689,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 6.448,
+   "kind": "beat",
+   "intensity": 0.43,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 7.248,
+   "kind": "beat",
+   "intensity": 0.42,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 7.686,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 8.081,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 8.29,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 8.499,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 8.87,
+   "kind": "bass",
+   "intensity": 0.68,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 9.288,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 9.497,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 9.683,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 10.495,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 10.89,
+   "kind": "percussion",
+   "intensity": 0.47,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 11.285,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 11.494,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 12.098,
+   "kind": "percussion",
+   "intensity": 0.44,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 12.846,
+   "kind": "beat",
+   "intensity": 0.58,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 13.645,
+   "kind": "beat",
+   "intensity": 0.56,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 14.071,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 14.28,
+   "kind": "percussion",
+   "intensity": 0.5,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 14.445,
+   "kind": "beat",
+   "intensity": 0.53,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 14.721,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 14.907,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 15.279,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 15.673,
+   "kind": "percussion",
+   "intensity": 0.58,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 16.091,
+   "kind": "percussion",
+   "intensity": 0.41,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 16.844,
+   "kind": "beat",
+   "intensity": 0.58,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 17.485,
+   "kind": "percussion",
+   "intensity": 0.45,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 17.644,
+   "kind": "beat",
+   "intensity": 0.56,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 17.926,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 18.483,
+   "kind": "percussion",
+   "intensity": 0.56,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 18.901,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 19.243,
+   "kind": "beat",
+   "intensity": 0.55,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 19.644,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 20.085,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 20.842,
+   "kind": "beat",
+   "intensity": 0.53,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 21.293,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 21.642,
+   "kind": "beat",
+   "intensity": 0.55,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 22.059,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 22.477,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 23.241,
+   "kind": "beat",
+   "intensity": 0.55,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 24.041,
+   "kind": "beat",
+   "intensity": 0.56,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 24.451,
+   "kind": "percussion",
+   "intensity": 0.48,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 24.683,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 24.841,
+   "kind": "beat",
+   "intensity": 0.61,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 25.263,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 25.64,
+   "kind": "beat",
+   "intensity": 0.6,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 26.471,
+   "kind": "percussion",
+   "intensity": 0.5,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 26.865,
+   "kind": "percussion",
+   "intensity": 0.5,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 27.24,
+   "kind": "beat",
+   "intensity": 0.59,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 27.632,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 28.073,
+   "kind": "percussion",
+   "intensity": 0.66,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 28.677,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 28.862,
+   "kind": "bass",
+   "intensity": 0.55,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 29.257,
+   "kind": "percussion",
+   "intensity": 0.53,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 29.675,
+   "kind": "percussion",
+   "intensity": 0.6,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 30.279,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 30.439,
+   "kind": "beat",
+   "intensity": 0.63,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 31.238,
+   "kind": "beat",
+   "intensity": 0.68,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 32.038,
+   "kind": "beat",
+   "intensity": 0.61,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 32.879,
+   "kind": "percussion",
+   "intensity": 0.54,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 33.669,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 34.482,
+   "kind": "percussion",
+   "intensity": 0.57,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 35.062,
+   "kind": "percussion",
+   "intensity": 0.5,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 35.237,
+   "kind": "beat",
+   "intensity": 0.59,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 36.061,
+   "kind": "percussion",
+   "intensity": 0.64,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 36.479,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 36.836,
+   "kind": "beat",
+   "intensity": 0.63,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 37.268,
+   "kind": "bass",
+   "intensity": 0.66,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 37.686,
+   "kind": "percussion",
+   "intensity": 0.43,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 37.872,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 38.081,
+   "kind": "percussion",
+   "intensity": 0.5,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 38.475,
+   "kind": "bass",
+   "intensity": 0.72,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 39.265,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 39.683,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 40.0,
+   "kind": "build",
+   "intensity": 0.7,
+   "pattern": "ramp",
+   "duration_ms": 400,
+   "color": "#FFA53E",
+   "text": "BUILD"
+  },
+  {
+   "t": 40.867,
+   "kind": "percussion",
+   "intensity": 0.69,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 41.285,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 41.657,
+   "kind": "bass",
+   "intensity": 0.71,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 42.469,
+   "kind": "percussion",
+   "intensity": 0.55,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 42.887,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 43.233,
+   "kind": "beat",
+   "intensity": 0.65,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 44.033,
+   "kind": "beat",
+   "intensity": 0.68,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 44.838,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 45.674,
+   "kind": "percussion",
+   "intensity": 0.51,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 46.432,
+   "kind": "beat",
+   "intensity": 0.62,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 47.276,
+   "kind": "percussion",
+   "intensity": 0.42,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 48.032,
+   "kind": "beat",
+   "intensity": 0.63,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 48.878,
+   "kind": "percussion",
+   "intensity": 0.62,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 49.631,
+   "kind": "beat",
+   "intensity": 0.64,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 50.48,
+   "kind": "percussion",
+   "intensity": 0.7,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 51.23,
+   "kind": "beat",
+   "intensity": 0.69,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 52.03,
+   "kind": "beat",
+   "intensity": 0.64,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 52.83,
+   "kind": "beat",
+   "intensity": 0.59,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 53.629,
+   "kind": "beat",
+   "intensity": 0.58,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 54.079,
+   "kind": "percussion",
+   "intensity": 0.46,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 54.497,
+   "kind": "percussion",
+   "intensity": 0.48,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 55.229,
+   "kind": "beat",
+   "intensity": 0.62,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 56.099,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 56.866,
+   "kind": "percussion",
+   "intensity": 0.46,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 57.284,
+   "kind": "percussion",
+   "intensity": 0.5,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 57.702,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 58.027,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 58.491,
+   "kind": "percussion",
+   "intensity": 0.42,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 58.909,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 59.304,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 59.49,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 59.699,
+   "kind": "percussion",
+   "intensity": 0.54,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 60.093,
+   "kind": "percussion",
+   "intensity": 0.43,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 60.442,
+   "kind": "percussion",
+   "intensity": 0.45,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 60.883,
+   "kind": "percussion",
+   "intensity": 0.62,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 61.626,
+   "kind": "beat",
+   "intensity": 0.59,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 62.067,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 62.508,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 62.903,
+   "kind": "percussion",
+   "intensity": 0.43,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 63.251,
+   "kind": "percussion",
+   "intensity": 0.61,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 64.03,
+   "kind": "build",
+   "intensity": 0.7,
+   "pattern": "ramp",
+   "duration_ms": 400,
+   "color": "#FFA53E",
+   "text": "PRE-HOOK"
+  },
+  {
+   "t": 64.825,
+   "kind": "beat",
+   "intensity": 0.64,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 65.271,
+   "kind": "percussion",
+   "intensity": 0.56,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 65.624,
+   "kind": "beat",
+   "intensity": 0.61,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 66.084,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 66.479,
+   "kind": "bass",
+   "intensity": 0.61,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 66.873,
+   "kind": "percussion",
+   "intensity": 0.67,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 67.268,
+   "kind": "bass",
+   "intensity": 0.88,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 67.686,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 67.872,
+   "kind": "percussion",
+   "intensity": 0.42,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 68.081,
+   "kind": "percussion",
+   "intensity": 0.55,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 68.429,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 68.87,
+   "kind": "percussion",
+   "intensity": 0.49,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 69.288,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 69.623,
+   "kind": "beat",
+   "intensity": 0.62,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 70.078,
+   "kind": "percussion",
+   "intensity": 0.53,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 70.496,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 70.891,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 71.222,
+   "kind": "beat",
+   "intensity": 0.62,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 71.68,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 72.022,
+   "kind": "beat",
+   "intensity": 0.61,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 72.864,
+   "kind": "percussion",
+   "intensity": 0.42,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 73.677,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 74.095,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 74.421,
+   "kind": "beat",
+   "intensity": 0.64,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 74.884,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 75.221,
+   "kind": "beat",
+   "intensity": 0.62,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 75.674,
+   "kind": "percussion",
+   "intensity": 0.69,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 76.069,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 76.83,
+   "kind": "drop",
+   "intensity": 1.0,
+   "pattern": "long",
+   "duration_ms": 600,
+   "color": "#FFC83E",
+   "text": "DROP"
+  },
+  {
+   "t": 77.62,
+   "kind": "beat",
+   "intensity": 0.7,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 78.419,
+   "kind": "beat",
+   "intensity": 0.72,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 79.219,
+   "kind": "beat",
+   "intensity": 0.74,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 79.668,
+   "kind": "bass",
+   "intensity": 0.72,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 79.877,
+   "kind": "bass",
+   "intensity": 0.67,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 80.029,
+   "kind": "chorus",
+   "intensity": 0.8,
+   "pattern": "double_tap",
+   "duration_ms": 200,
+   "color": "#FF3EA5",
+   "text": "HOOK"
+  },
+  {
+   "t": 80.818,
+   "kind": "beat",
+   "intensity": 0.71,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 81.618,
+   "kind": "beat",
+   "intensity": 0.69,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 82.418,
+   "kind": "beat",
+   "intensity": 0.64,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 83.217,
+   "kind": "beat",
+   "intensity": 0.67,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 83.708,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 84.017,
+   "kind": "beat",
+   "intensity": 0.72,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 84.497,
+   "kind": "percussion",
+   "intensity": 0.45,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 84.817,
+   "kind": "beat",
+   "intensity": 0.71,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 85.616,
+   "kind": "beat",
+   "intensity": 0.7,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 86.1,
+   "kind": "percussion",
+   "intensity": 0.64,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 86.471,
+   "kind": "bass",
+   "intensity": 0.53,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 87.216,
+   "kind": "beat",
+   "intensity": 0.72,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 87.911,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 88.097,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 88.305,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 88.815,
+   "kind": "beat",
+   "intensity": 0.7,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 89.072,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 89.281,
+   "kind": "percussion",
+   "intensity": 0.74,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 89.49,
+   "kind": "percussion",
+   "intensity": 0.54,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 89.675,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 90.415,
+   "kind": "beat",
+   "intensity": 0.74,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 90.883,
+   "kind": "percussion",
+   "intensity": 0.54,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 91.214,
+   "kind": "beat",
+   "intensity": 0.73,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 92.014,
+   "kind": "beat",
+   "intensity": 0.75,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 92.485,
+   "kind": "percussion",
+   "intensity": 0.79,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 92.814,
+   "kind": "beat",
+   "intensity": 0.73,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 93.298,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 93.613,
+   "kind": "beat",
+   "intensity": 0.75,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 94.413,
+   "kind": "beat",
+   "intensity": 0.71,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 95.213,
+   "kind": "beat",
+   "intensity": 0.7,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 95.689,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 96.012,
+   "kind": "beat",
+   "intensity": 0.71,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 96.812,
+   "kind": "beat",
+   "intensity": 0.72,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 97.612,
+   "kind": "beat",
+   "intensity": 0.73,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 98.411,
+   "kind": "beat",
+   "intensity": 0.73,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 99.211,
+   "kind": "beat",
+   "intensity": 0.7,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 100.011,
+   "kind": "beat",
+   "intensity": 0.73,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 100.81,
+   "kind": "beat",
+   "intensity": 0.7,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 101.61,
+   "kind": "beat",
+   "intensity": 0.69,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 102.41,
+   "kind": "beat",
+   "intensity": 0.62,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 103.282,
+   "kind": "percussion",
+   "intensity": 0.45,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 104.009,
+   "kind": "beat",
+   "intensity": 0.58,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 104.861,
+   "kind": "percussion",
+   "intensity": 0.67,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 105.674,
+   "kind": "bass",
+   "intensity": 0.54,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 106.069,
+   "kind": "percussion",
+   "intensity": 0.42,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 106.463,
+   "kind": "percussion",
+   "intensity": 0.47,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 107.208,
+   "kind": "beat",
+   "intensity": 0.64,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 108.008,
+   "kind": "beat",
+   "intensity": 0.69,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 108.878,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 109.668,
+   "kind": "percussion",
+   "intensity": 0.56,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 110.457,
+   "kind": "percussion",
+   "intensity": 0.61,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 111.27,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 112.006,
+   "kind": "beat",
+   "intensity": 0.61,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 112.872,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 113.058,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 113.267,
+   "kind": "percussion",
+   "intensity": 0.57,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 113.662,
+   "kind": "percussion",
+   "intensity": 0.65,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 114.056,
+   "kind": "bass",
+   "intensity": 0.81,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 114.474,
+   "kind": "percussion",
+   "intensity": 0.54,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 114.869,
+   "kind": "percussion",
+   "intensity": 0.42,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 115.264,
+   "kind": "bass",
+   "intensity": 0.79,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 116.077,
+   "kind": "percussion",
+   "intensity": 0.42,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 116.471,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 116.804,
+   "kind": "beat",
+   "intensity": 0.62,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 117.679,
+   "kind": "percussion",
+   "intensity": 0.67,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 117.864,
+   "kind": "percussion",
+   "intensity": 0.6,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 118.073,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 118.403,
+   "kind": "beat",
+   "intensity": 0.58,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 118.84,
+   "kind": "percussion",
+   "intensity": 0.43,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 119.258,
+   "kind": "percussion",
+   "intensity": 0.67,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 120.003,
+   "kind": "beat",
+   "intensity": 0.64,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 120.488,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 120.883,
+   "kind": "percussion",
+   "intensity": 0.63,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 121.301,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 121.602,
+   "kind": "beat",
+   "intensity": 0.63,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 122.485,
+   "kind": "percussion",
+   "intensity": 0.49,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 123.275,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 124.001,
+   "kind": "beat",
+   "intensity": 0.65,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 124.801,
+   "kind": "beat",
+   "intensity": 0.64,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 125.6,
+   "kind": "beat",
+   "intensity": 0.64,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 126.4,
+   "kind": "beat",
+   "intensity": 0.64,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 127.0,
+   "kind": "build",
+   "intensity": 0.7,
+   "pattern": "ramp",
+   "duration_ms": 400,
+   "color": "#FFA53E",
+   "text": "BUILD 2"
+  },
+  {
+   "t": 127.2,
+   "kind": "beat",
+   "intensity": 0.69,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 128.0,
+   "kind": "beat",
+   "intensity": 0.69,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 128.799,
+   "kind": "beat",
+   "intensity": 0.67,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 129.289,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 129.599,
+   "kind": "beat",
+   "intensity": 0.59,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 130.399,
+   "kind": "beat",
+   "intensity": 0.58,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 130.891,
+   "kind": "percussion",
+   "intensity": 0.61,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 131.077,
+   "kind": "percussion",
+   "intensity": 0.41,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 131.286,
+   "kind": "percussion",
+   "intensity": 0.54,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 131.704,
+   "kind": "percussion",
+   "intensity": 0.41,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 131.998,
+   "kind": "beat",
+   "intensity": 0.62,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 132.798,
+   "kind": "beat",
+   "intensity": 0.59,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 133.306,
+   "kind": "bass",
+   "intensity": 0.57,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 133.677,
+   "kind": "percussion",
+   "intensity": 0.46,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 134.095,
+   "kind": "bass",
+   "intensity": 0.7,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 134.397,
+   "kind": "beat",
+   "intensity": 0.58,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 135.197,
+   "kind": "beat",
+   "intensity": 0.57,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 135.697,
+   "kind": "bass",
+   "intensity": 0.56,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 135.996,
+   "kind": "beat",
+   "intensity": 0.57,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 136.301,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 136.487,
+   "kind": "percussion",
+   "intensity": 0.66,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 136.796,
+   "kind": "beat",
+   "intensity": 0.58,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 137.253,
+   "kind": "percussion",
+   "intensity": 0.49,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 137.694,
+   "kind": "percussion",
+   "intensity": 0.62,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 138.395,
+   "kind": "beat",
+   "intensity": 0.58,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 138.855,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 139.195,
+   "kind": "beat",
+   "intensity": 0.57,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 139.691,
+   "kind": "percussion",
+   "intensity": 0.59,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 140.063,
+   "kind": "percussion",
+   "intensity": 0.51,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 140.794,
+   "kind": "beat",
+   "intensity": 0.63,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 141.293,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 141.479,
+   "kind": "bass",
+   "intensity": 0.68,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 142.083,
+   "kind": "bass",
+   "intensity": 0.7,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 142.394,
+   "kind": "beat",
+   "intensity": 0.62,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 143.29,
+   "kind": "bass",
+   "intensity": 0.62,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 143.685,
+   "kind": "percussion",
+   "intensity": 0.59,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 144.08,
+   "kind": "bass",
+   "intensity": 0.8,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 144.475,
+   "kind": "bass",
+   "intensity": 0.56,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 144.684,
+   "kind": "percussion",
+   "intensity": 0.43,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 144.869,
+   "kind": "percussion",
+   "intensity": 0.64,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 145.241,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 145.682,
+   "kind": "percussion",
+   "intensity": 0.56,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 146.077,
+   "kind": "percussion",
+   "intensity": 0.52,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 146.355,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 146.866,
+   "kind": "percussion",
+   "intensity": 0.7,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 147.284,
+   "kind": "bass",
+   "intensity": 0.67,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 147.679,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 147.992,
+   "kind": "beat",
+   "intensity": 0.62,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 148.791,
+   "kind": "beat",
+   "intensity": 0.62,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 149.281,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 149.676,
+   "kind": "bass",
+   "intensity": 0.53,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 150.391,
+   "kind": "beat",
+   "intensity": 0.63,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 151.19,
+   "kind": "beat",
+   "intensity": 0.64,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 151.99,
+   "kind": "beat",
+   "intensity": 0.62,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 152.462,
+   "kind": "percussion",
+   "intensity": 0.58,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 152.79,
+   "kind": "beat",
+   "intensity": 0.63,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 153.275,
+   "kind": "percussion",
+   "intensity": 0.5,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 153.63,
+   "kind": "drop",
+   "intensity": 1.0,
+   "pattern": "long",
+   "duration_ms": 600,
+   "color": "#FFC83E",
+   "text": "DROP"
+  },
+  {
+   "t": 154.389,
+   "kind": "beat",
+   "intensity": 0.71,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 154.9,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 155.189,
+   "kind": "beat",
+   "intensity": 0.74,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 155.922,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 156.479,
+   "kind": "bass",
+   "intensity": 0.6,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 156.665,
+   "kind": "bass",
+   "intensity": 0.98,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 156.829,
+   "kind": "chorus",
+   "intensity": 0.8,
+   "pattern": "double_tap",
+   "duration_ms": 200,
+   "color": "#FF3EA5",
+   "text": "FINAL HOOK"
+  },
+  {
+   "t": 157.588,
+   "kind": "beat",
+   "intensity": 0.72,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 158.387,
+   "kind": "beat",
+   "intensity": 0.69,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 159.103,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 159.916,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 160.705,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 161.586,
+   "kind": "beat",
+   "intensity": 0.73,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 162.386,
+   "kind": "beat",
+   "intensity": 0.72,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 162.911,
+   "kind": "percussion",
+   "intensity": 0.56,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 163.185,
+   "kind": "beat",
+   "intensity": 0.69,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 163.91,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 164.467,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 164.699,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 164.908,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 165.117,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 165.303,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 165.512,
+   "kind": "bass",
+   "intensity": 0.63,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 165.883,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 166.069,
+   "kind": "percussion",
+   "intensity": 0.62,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 166.301,
+   "kind": "percussion",
+   "intensity": 0.7,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 166.882,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 167.114,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 167.671,
+   "kind": "percussion",
+   "intensity": 0.47,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 167.984,
+   "kind": "beat",
+   "intensity": 0.74,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 168.783,
+   "kind": "beat",
+   "intensity": 0.74,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 169.088,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 169.297,
+   "kind": "percussion",
+   "intensity": 0.78,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 169.506,
+   "kind": "percussion",
+   "intensity": 0.53,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 170.383,
+   "kind": "beat",
+   "intensity": 0.74,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 171.108,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 171.688,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 171.897,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 172.083,
+   "kind": "percussion",
+   "intensity": 0.4,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 172.501,
+   "kind": "percussion",
+   "intensity": 0.66,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 172.71,
+   "kind": "percussion",
+   "intensity": 0.56,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 173.291,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 173.581,
+   "kind": "beat",
+   "intensity": 0.72,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 174.08,
+   "kind": "percussion",
+   "intensity": 0.46,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 174.381,
+   "kind": "beat",
+   "intensity": 0.73,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 175.102,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 175.496,
+   "kind": "percussion",
+   "intensity": 0.43,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 175.682,
+   "kind": "percussion",
+   "intensity": 0.5,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 175.891,
+   "kind": "percussion",
+   "intensity": 0.52,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 176.495,
+   "kind": "bass",
+   "intensity": 0.64,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 176.704,
+   "kind": "bass",
+   "intensity": 0.5,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 177.284,
+   "kind": "bass",
+   "intensity": 0.53,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 177.493,
+   "kind": "bass",
+   "intensity": 0.56,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 177.911,
+   "kind": "bass",
+   "intensity": 0.55,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 178.097,
+   "kind": "bass",
+   "intensity": 0.53,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 178.306,
+   "kind": "bass",
+   "intensity": 0.61,
+   "pattern": "pulse",
+   "duration_ms": 160,
+   "color": "#FF3EA5"
+  },
+  {
+   "t": 178.887,
+   "kind": "percussion",
+   "intensity": 0.42,
+   "pattern": "tap",
+   "duration_ms": 60,
+   "color": "#FFFFFF"
+  },
+  {
+   "t": 179.179,
+   "kind": "beat",
+   "intensity": 0.51,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  },
+  {
+   "t": 179.979,
+   "kind": "beat",
+   "intensity": 0.41,
+   "pattern": "tap",
+   "duration_ms": 70,
+   "color": "#3EA5FF"
+  }
+ ],
+ "counts": {
+  "beat": 118,
+  "bass": 78,
+  "percussion": 156,
+  "build": 3,
+  "drop": 2,
+  "chorus": 2
+ }
+}

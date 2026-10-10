@@ -1,0 +1,11 @@
+fastapi>=0.115
+uvicorn[standard]>=0.30
+websockets>=12
+pydantic>=2.7
+# Tiger Data (TimescaleDB). Only used when TIGER_DATABASE_URL is set.
+asyncpg>=0.29
+# Google Gemini. Only used when GEMINI_API_KEY is set.
+google-genai>=1.0
+# dev / tests
+pytest>=8
+httpx>=0.27
