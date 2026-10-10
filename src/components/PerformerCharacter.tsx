@@ -18,7 +18,16 @@ export interface PerformerPose {
 interface PerformerCharacterProps {
   pose: PerformerPose;
   /** Per-frame motion layered on top of the pose (from the app's beat); all zero when still. */
-  motion: { sway: number; bounce: number; freeArm: number; micArm: number };
+  motion: {
+    sway: number;
+    bounce: number;
+    freeArm: number;
+    micArm: number;
+    /** Weight shift between the feet, px. */
+    shift?: number;
+    /** Head nod/tilt on the beat, degrees. */
+    head?: number;
+  };
   /** Rim-light colour. */
   rim: "aura" | "anticipate";
   /** 0–1 rim-light strength. */
@@ -80,7 +89,9 @@ export default function PerformerCharacter({ pose, motion, rim, glow, animatePos
   return (
     <svg viewBox="0 0 400 600" className="h-full w-auto overflow-visible" aria-hidden="true">
       {/* Body sway and bounce pivot at the feet */}
-      <g transform={`translate(200 590) rotate(${motion.sway}) translate(-200 -590) translate(0 ${-motion.bounce})`}>
+      <g
+        transform={`translate(${motion.shift ?? 0} 0) translate(200 590) rotate(${motion.sway}) translate(-200 -590) translate(0 ${-motion.bounce})`}
+      >
         <g style={{ transformOrigin: "200px 590px", ...rot(pose.lean) }}>
           {/* Legs: tapered trousers and boots */}
           <g style={{ transform: `translateX(${-pose.stance / 2}px)`, transition: ease }}>
@@ -117,6 +128,7 @@ export default function PerformerCharacter({ pose, motion, rim, glow, animatePos
 
           {/* Head */}
           <g style={{ transformOrigin: "200px 168px", ...rot(pose.head) }}>
+            <g transform={`rotate(${motion.head ?? 0} 200 168)`}>
             <path d="M188 140 L212 140 L214 174 L186 174 Z" fill={INK} />
             <ellipse cx={200} cy={112} rx={31} ry={37} fill={INK} {...stroke} />
             {/* Hair: undercut with a swept top */}
@@ -126,6 +138,7 @@ export default function PerformerCharacter({ pose, motion, rim, glow, animatePos
               {...stroke}
             />
             <path d="M228 98 Q236 120 226 140" fill="none" stroke={rimColor} strokeOpacity={rimOpacity * 0.7} strokeWidth={2} />
+            </g>
           </g>
 
           {arm("free")}
