@@ -17,6 +17,16 @@
   --animate-aura-drift: aura-drift 18s ease-in-out infinite alternate;
   --animate-rise: rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
   --animate-burst: burst 1400ms cubic-bezier(0.1, 0.6, 0.3, 1) both;
+  /* Visual polish — decorative only, never used for musical timing */
+  --animate-glow-in: glow-in 900ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-float-up: float-up 16s linear infinite;
+  --animate-particle: particle 1300ms cubic-bezier(0.15, 0.7, 0.3, 1) both;
+  --animate-wave-flow: wave-flow 2.6s linear infinite;
+  --animate-crowd-ripple: crowd-ripple 1100ms ease-out both;
+  --animate-beam-open: beam-open 1600ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-shimmer: shimmer 1400ms ease-out both;
+  --animate-lyric-in: lyric-in 320ms ease-out both;
+  --animate-spot-sweep: spot-sweep 7s ease-in-out infinite alternate;
 
   @keyframes aura-drift {
     0% { transform: translate3d(-6%, -4%, 0) scale(1); }
@@ -26,6 +36,56 @@
   @keyframes burst {
     from { opacity: 0.9; transform: scale(0.4); }
     to { opacity: 0; transform: scale(2.2); }
+  }
+
+  @keyframes glow-in {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes float-up {
+    0% { transform: translate3d(0, 0, 0); opacity: 0; }
+    15% { opacity: 1; }
+    85% { opacity: 1; }
+    100% { transform: translate3d(var(--drift, 0px), -32vh, 0); opacity: 0; }
+  }
+
+  @keyframes particle {
+    from { transform: translate(-50%, -50%) translate(0, 0) scale(1); opacity: 1; }
+    to { transform: translate(-50%, -50%) translate(var(--dx), var(--dy)) scale(0.3); opacity: 0; }
+  }
+
+  @keyframes wave-flow {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @keyframes crowd-ripple {
+    0% { filter: brightness(1); transform: translateY(0); }
+    35% { filter: brightness(2.2); transform: translateY(-6px); }
+    100% { filter: brightness(1); transform: translateY(0); }
+  }
+
+  @keyframes beam-open {
+    0% { opacity: 0; transform: rotate(var(--from, 0deg)) scaleY(0.6); }
+    30% { opacity: 1; }
+    100% { opacity: 0; transform: rotate(var(--to, 0deg)) scaleY(1); }
+  }
+
+  @keyframes shimmer {
+    from { transform: translateX(-100%); opacity: 0; }
+    30% { opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+  }
+
+  @keyframes spot-sweep {
+    from { transform: rotate(var(--from, -8deg)); }
+    to { transform: rotate(var(--to, 8deg)); }
+  }
+
+  @keyframes lyric-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   @keyframes rise {
