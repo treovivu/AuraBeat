@@ -3,11 +3,15 @@ import type { Screen } from "./types/navigation";
 import Home from "./pages/Home";
 import LiveConcert from "./pages/LiveConcert";
 import AtHomeConcert from "./pages/AtHomeConcert";
+import { startWatchRelay } from "./lib/watchRelay";
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>("home");
   const mainRef = useRef<HTMLElement>(null);
   const isFirstRender = useRef(true);
+
+  // DEV: link to the dev server's watch relay, so a watch (or a phone via watch-sim.html) can join.
+  useEffect(() => (import.meta.env.DEV ? startWatchRelay() : undefined), []);
 
   // Move focus to the new screen so keyboard and screen-reader users land at the top.
   useEffect(() => {
