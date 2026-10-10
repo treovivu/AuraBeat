@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AuraBeat Show Stats</title>
+<style>
+  :root {
+    color-scheme: light;
+    --surface-0: #f4f3f0; --surface-1: #fcfcfb; --border: #e3e2dd;
+    --text-primary: #0b0b0b; --text-secondary: #52514e; --text-muted: #7a7973;
+    --series-1: #2a78d6; --grid: #e9e8e3; --good: #008300; --off: #b5b4ae;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --surface-0: #111110; --surface-1: #1a1a19; --border: #2c2c2a;
+      --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #8f8e86;
+      --series-1: #3987e5; --grid: #2a2a28; --good: #2fae4e; --off: #55544f;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --surface-0: #111110; --surface-1: #1a1a19; --border: #2c2c2a;
+    --text-primary: #f0efec; --text-secondary: #c3c2b7; --text-muted: #8f8e86;
+    --series-1: #3987e5; --grid: #2a2a28; --good: #2fae4e; --off: #55544f;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--surface-0); color: var(--text-primary);
+         font: 15px/1.45 -apple-system, system-ui, "Segoe UI", sans-serif; }
+  main { max-width: 1040px; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { font-size: 24px; margin: 0; }
+  .sub { color: var(--text-secondary); margin: 4px 0 20px; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 16px; }
+  button, select { font: inherit; padding: 8px 14px; border-radius: 10px; border: 1px solid var(--border);
+                   background: var(--surface-1); color: var(--text-primary); cursor: pointer; }
+  button.primary { background: var(--series-1); border-color: var(--series-1); color: #fff; }
+  .pill { display: inline-flex; gap: 6px; align-items: center; padding: 4px 10px; border-radius: 999px;
+          background: var(--surface-1); border: 1px solid var(--border); color: var(--text-secondary); font-size: 13px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--off); }
+  .dot.on { background: var(--good); }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .tile, .card { background: var(--surface-1); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; }
+  .tile .v { font-size: 30px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .tile .l { color: var(--text-secondary); font-size: 13px; }
+  .grid2 { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 820px) { .grid2 { grid-template-columns: 1fr 1fr; } }
+  .card h2 { font-size: 15px; margin: 0 0 2px; }
+  .card p.note { color: var(--text-muted); font-size: 12.5px; margin: 0 0 10px; }
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .empty { color: var(--text-muted); font-size: 13px; padding: 24px 0; text-align: center; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+  th, td { text-align: left; padding: 6px 4px; border-bottom: 1px solid var(--grid); }
+  th { color: var(--text-secondary); font-weight: 600; }
+  td.n, th.n { text-align: right; }
+  #tip { position: fixed; pointer-events: none; background: var(--surface-1); border: 1px solid var(--border);
+         color: var(--text-primary); padding: 6px 9px; border-radius: 8px; font-size: 12.5px; display: none;
+         box-shadow: 0 4px 14px rgba(0,0,0,.15); z-index: 9; }
+  .off-msg { margin-bottom: 16px; background: var(--surface-1); border: 1px dashed var(--border); border-radius: 14px; padding: 16px; color: var(--text-secondary); }
+  code { font-size: 12.5px; }
+  .announce { margin-bottom: 16px; }
+  .announce input:not([type]) , #announceText { flex: 1; min-width: 180px; font: inherit; padding: 8px 12px; border-radius: 10px;
+         border: 1px solid var(--border); background: var(--surface-0); color: var(--text-primary); }
+  .check { display: inline-flex; gap: 6px; align-items: center; color: var(--text-secondary); font-size: 14px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+</style>
+</head>
+<body>
+<main>
+  <h1>AuraBeat Show Stats</h1>
+  <p class="sub">Every cue, latency sample and wrist wave, stored in Tiger Data and queried with <code>time_bucket</code>.</p>
+
+  <div class="row">
+    <span class="pill"><span id="tigerDot" class="dot"></span><span id="tigerTxt">Tiger Data</span></span>
+    <span class="pill"><span id="geminiDot" class="dot"></span><span id="geminiTxt">Gemini</span></span>
+    <span class="pill" id="playing">Not playing</span>
+    <span style="flex:1"></span>
+    <select id="song" aria-label="Song"></select>
+    <button class="primary" id="play">Play song</button>
+    <button id="stop">Stop</button>
+    <select id="range" aria-label="Time range">
+      <option value="15">Last 15 min</option><option value="60" selected>Last hour</option><option value="1440">Last day</option>
+    </select>
+  </div>
+
+  <form id="announceForm" class="card announce" autocomplete="off">
+    <h2>Send an announcement</h2>
+    <p class="note">Shows as words on every phone and taps every watch. For what's said over the PA.</p>
+    <div class="row" style="margin:0">
+      <label for="announceText" class="sr">Announcement</label>
+      <input id="announceText" maxlength="280" required placeholder="Encore starts in 5 minutes">
+      <label class="check"><input type="checkbox" id="urgent"> Urgent</label>
+      <button class="primary" type="submit">Send</button>
+    </div>
+    <p id="announceResult" class="note" role="status" style="margin:6px 0 0"></p>
+  </form>
+
+  <div id="offMsg" class="off-msg" hidden>
+    Tiger Data isn't connected, so there's nothing stored yet. Set <code>TIGER_DATABASE_URL</code> and restart the server.
+  </div>
+
+  <div class="tiles">
+    <div class="tile"><div class="v" id="tCues">–</div><div class="l">Cues sent</div></div>
+    <div class="tile"><div class="v" id="tWaves">–</div><div class="l">Wrist waves</div></div>
+    <div class="tile"><div class="v" id="tDevices">–</div><div class="l">Devices seen</div></div>
+    <div class="tile"><div class="v" id="tLatency">–</div><div class="l">Avg phone round trip (ms)</div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>Cues per 10 seconds</h2>
+      <p class="note">How busy the haptic stream was.</p>
+      <div id="activity"></div>
+    </div>
+    <div class="card">
+      <h2>Song intensity, every 5 s of the song</h2>
+      <p class="note">Average cue strength at each point in the song.</p>
+      <div id="heat"></div>
+    </div>
+    <div class="card">
+      <h2>Waves, every 5 s of the song</h2>
+      <p class="note">Which moments made people wave.</p>
+      <div id="wavesSong"></div>
+    </div>
+    <div class="card">
+      <h2>Play Along results</h2>
+      <p class="note">Real attempt scores (rule v1: ±200 ms = 100, ±350 ms = 50).</p>
+      <div id="playAlong"></div>
+    </div>
+    <div class="card">
+      <h2>Latency by device</h2>
+      <p class="note">Round trip from ping/pong; cue latency from acks.</p>
+      <div id="latency"></div>
+    </div>
+  </div>
+</main>
+<div id="tip" role="tooltip"></div>
+<script>
+const SESSION = new URLSearchParams(location.search).get("session") || "demo";
+const $ = (id) => document.getElementById(id);
+const tip = $("tip");
+
+function showTip(e, html) { tip.innerHTML = html; tip.style.display = "block";
+  tip.style.left = Math.min(e.clientX + 12, innerWidth - 180) + "px"; tip.style.top = (e.clientY + 12) + "px"; }
+function hideTip() { tip.style.display = "none"; }
+
+// Single-series bar chart: 4px rounded tops anchored to the baseline, 2px gaps, hover tooltip.
+function bars(el, data, { value, label, fmt = (v) => v, height = 160 }) {
+  if (!data.length) { el.innerHTML = '<div class="empty">No data yet. Play a song with a phone or watch connected.</div>'; return; }
+  const W = 480, H = height, pad = { l: 34, b: 20, t: 8 };
+  const max = Math.max(...data.map(value), 1e-9);
+  const n = data.length, slot = (W - pad.l) / n, bw = Math.max(1, slot - 2);
+  const y = (v) => pad.t + (H - pad.t - pad.b) * (1 - v / max);
+  const ticks = [0, max / 2, max];
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="bar chart">`;
+  ticks.forEach((t) => { s += `<line x1="${pad.l}" x2="${W}" y1="${y(t)}" y2="${y(t)}" stroke="var(--grid)"/>`
+    + `<text x="${pad.l - 6}" y="${y(t) + 4}" text-anchor="end" font-size="10" fill="var(--text-muted)">${fmt(t)}</text>`; });
+  data.forEach((d, i) => {
+    const v = value(d), x = pad.l + i * slot + 1, top = y(v), h = Math.max(0, H - pad.b - top);
+    const r = Math.min(4, bw / 2, h);
+    if (h > 0) s += `<path d="M${x},${H - pad.b} V${top + r} Q${x},${top} ${x + r},${top} H${x + bw - r} Q${x + bw},${top} ${x + bw},${top + r} V${H - pad.b} Z" fill="var(--series-1)"/>`;
+    s += `<rect x="${pad.l + i * slot}" y="${pad.t}" width="${slot}" height="${H - pad.t - pad.b}" fill="transparent" data-i="${i}"/>`;
+  });
+  const every = Math.max(1, Math.ceil(n / 6));
+  data.forEach((d, i) => { if (i % every === 0) s += `<text x="${pad.l + i * slot + slot / 2}" y="${H - 5}" text-anchor="middle" font-size="10" fill="var(--text-muted)">${label(d)}</text>`; });
+  el.innerHTML = s + "</svg>";
+  el.querySelectorAll("rect[data-i]").forEach((r) => {
+    const d = data[+r.dataset.i];
+    r.addEventListener("mousemove", (e) => showTip(e, `<b>${label(d)}</b><br>${fmt(value(d))}`));
+    r.addEventListener("mouseleave", hideTip);
+  });
+}
+
+const clock = (iso) => new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, "0")}`;
+
+async function refresh() {
+  try {
+    const [integ, st, tl] = await Promise.all([
+      fetch("/integrations").then((r) => r.json()),
+      fetch(`/stats/${SESSION}?minutes=${$("range").value}`).then((r) => r.json()),
+      fetch(`/sessions/${SESSION}/timeline`).then((r) => r.json()),
+    ]);
+    $("tigerDot").classList.toggle("on", integ.tiger_data.enabled);
+    $("tigerTxt").textContent = integ.tiger_data.enabled ? `Tiger Data · ${integ.tiger_data.rows_written} rows` : "Tiger Data off";
+    $("geminiDot").classList.toggle("on", integ.gemini.enabled);
+    $("geminiTxt").textContent = integ.gemini.enabled ? `Gemini · ${integ.gemini.model}` : "Gemini off";
+    $("playing").textContent = tl.playing ? `Playing ${tl.title} · ${mmss(tl.position_ms / 1000)}` : "Not playing";
+    $("offMsg").hidden = st.enabled;
+    if (!st.enabled) return;
+
+    const t = st.totals || {};
+    $("tCues").textContent = (t.cues ?? 0).toLocaleString();
+    $("tWaves").textContent = (t.waves ?? 0).toLocaleString();
+    $("tDevices").textContent = t.devices ?? 0;
+    const phones = st.latency.filter((d) => d.role === "phone" && d.avg_rtt_ms != null);
+    $("tLatency").textContent = phones.length ? Math.round(phones.reduce((a, d) => a + d.avg_rtt_ms, 0) / phones.length) : "–";
+
+    bars($("activity"), st.activity_10s, { value: (d) => d.cues, label: (d) => clock(d.bucket) });
+    bars($("heat"), st.song_heatmap_5s, { value: (d) => d.intensity, label: (d) => mmss(d.sec), fmt: (v) => (+v).toFixed(2) });
+    bars($("wavesSong"), st.song_heatmap_5s.filter((d) => d.waves > 0).length ? st.song_heatmap_5s : [],
+      { value: (d) => d.waves, label: (d) => mmss(d.sec), fmt: (v) => Math.round(v) });
+
+    $("playAlong").innerHTML = (st.play_along || []).length
+      ? `<table><thead><tr><th>When</th><th>Song</th><th class="n">Score</th><th class="n">On beat</th><th class="n">Close</th><th class="n">Missed</th></tr></thead><tbody>`
+        + st.play_along.map((d) => `<tr><td>${clock(d.time)}</td><td>${d.media_id}</td><td class="n">${d.total}</td><td class="n">${d.on_beat}</td><td class="n">${d.close}</td><td class="n">${d.missed}</td></tr>`).join("")
+        + "</tbody></table>"
+      : '<div class="empty">No finished attempts yet.</div>';
+
+    $("latency").innerHTML = st.latency.length
+      ? `<table><thead><tr><th>Device</th><th>Role</th><th class="n">Avg RTT</th><th class="n">p95 RTT</th><th class="n">Cue latency</th><th class="n">Samples</th></tr></thead><tbody>`
+        + st.latency.map((d) => `<tr><td>${d.client_id}</td><td>${d.role}</td><td class="n">${d.avg_rtt_ms ?? "–"}</td><td class="n">${d.p95_rtt_ms ?? "–"}</td><td class="n">${d.avg_cue_latency_ms ?? "–"}</td><td class="n">${d.samples}</td></tr>`).join("")
+        + "</tbody></table>"
+      : '<div class="empty">No latency samples yet.</div>';
+  } catch (e) { console.warn(e); }
+}
+
+async function loadSongs() {
+  const list = await fetch("/timelines").then((r) => r.json());
+  $("song").innerHTML = list.map((t) => `<option value="${t.name}">${t.title}</option>`).join("");
+}
+$("play").onclick = async () => {
+  await fetch(`/sessions/${SESSION}/timeline/start`, { method: "POST", headers: { "content-type": "application/json" },
+    body: JSON.stringify({ name: $("song").value }) });
+  refresh();
+};
+$("stop").onclick = async () => { await fetch(`/sessions/${SESSION}/timeline/stop`, { method: "POST" }); refresh(); };
+$("range").onchange = refresh;
+$("announceForm").onsubmit = async (e) => {
+  e.preventDefault();
+  const text = $("announceText").value.trim();
+  if (!text) return;
+  const r = await fetch(`/sessions/${SESSION}/announce`, { method: "POST", headers: { "content-type": "application/json" },
+    body: JSON.stringify({ text, urgent: $("urgent").checked }) }).then((x) => x.json());
+  $("announceResult").textContent = `Sent to ${r.delivered} device${r.delivered === 1 ? "" : "s"}.`;
+  $("announceText").value = "";
+};
+loadSongs(); refresh(); setInterval(refresh, 3000);
+</script>
+</body>
+</html>
