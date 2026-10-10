@@ -1,5 +1,13 @@
 # React + TypeScript + Vite
 
+## Media credits
+
+- "Grateful" — NEFFEX Music
+  Source: Wikimedia Commons ("NEFFEX - Grateful (Copyright Free).webm")
+  License: CC BY 3.0 — https://creativecommons.org/licenses/by/3.0/
+
+Captions for "Grateful" live in `src/data/grateful/grateful.en.srt` (or `.vtt`) when provided.
+
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
 Currently, two official plugins are available:
