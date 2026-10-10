@@ -115,7 +115,8 @@ export default memo(function CinematicInteraction({
         <div
           aria-hidden="true"
           className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/80 via-black/40 to-transparent transition-opacity duration-700"
-          style={{ opacity: active ? 1 : 0 }}
+          // Lighter during the celebration so the stage and audience can be seen answering.
+          style={{ opacity: !active ? 0 : state === "celebrate" ? 0.5 : 1 }}
         />
         {prompt}
       </div>

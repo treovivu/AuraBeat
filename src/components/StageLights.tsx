@@ -1,7 +1,10 @@
 import type { CSSProperties } from "react";
+import type { Act } from "./stageActs";
 
 interface StageLightsProps {
-  tone: "aura" | "amber";
+  act: Act;
+  /** True when the underlying section is the finale. */
+  finale: boolean;
   /** 0–1 how alive the moment is (from the app's intensity and mood). */
   energy: number;
   /** 0–1 the app's existing light pulse (beat grid and accent cues). */
@@ -9,104 +12,109 @@ interface StageLightsProps {
   /** 0–1 warm downbeat accent from the app's existing stage look. */
   accent: number;
   celebrating: boolean;
-  celebrationKey?: number;
   reducedMotion: boolean;
 }
 
-// Static shape of the LED wall bars, so the wall reads as a designed screen rather than noise.
-const BARS = Array.from({ length: 14 }, (_, i) => 0.35 + 0.65 * Math.abs(Math.sin(i * 1.7 + 0.6)));
+/** Truss positions (% of width), in the order beams switch on: centre first, then outward. */
+const TRUSS = [50, 36, 64, 23, 77, 10, 90];
 
-const SPOTS = [
-  { x: 18, from: -14, to: 10, delay: 0, mobile: false },
-  { x: 50, from: -6, to: 6, delay: -2.5, mobile: true },
-  { x: 82, from: -10, to: 14, delay: -5, mobile: true },
-];
+interface Rig {
+  /** Beams in use. */
+  count: number;
+  /** Where beams aim on the floor: 0 = all converge on the performer, 1 = straight down, >1 = fanned out. */
+  fan: number;
+  /** Beam width, % of the stage. */
+  width: number;
+  /** Slow sweep amplitude (deg); 0 = still. */
+  sweep: number;
+  warm: boolean;
+}
 
-/** The stage behind the performer: LED wall, truss spotlights, backlight halo, haze and floor glow. */
-export default function StageLights({ tone, energy, beatPulse, accent, celebrating, celebrationKey, reducedMotion }: StageLightsProps) {
-  const warm = celebrating || tone === "amber";
-  const color = warm ? "255,198,109" : "124,247,212";
-  const motion = !reducedMotion;
-  const spot = Math.min(1, 0.18 + 0.5 * energy + 0.3 * beatPulse + (celebrating ? 0.4 : 0));
+const RIGS: Record<Act, Rig> = {
+  intro: { count: 1, fan: 1, width: 14, sweep: 0, warm: false },
+  verse: { count: 3, fan: 1, width: 13, sweep: 4, warm: false },
+  build: { count: 5, fan: 1.3, width: 17, sweep: 5, warm: false },
+  prehook: { count: 5, fan: 0, width: 12, sweep: 0, warm: true },
+  ready: { count: 5, fan: 0, width: 10, sweep: 0, warm: true },
+  hook: { count: 5, fan: 2.2, width: 20, sweep: 7, warm: false },
+  wave: { count: 7, fan: 1.8, width: 20, sweep: 12, warm: false },
+  celebrate: { count: 7, fan: 3, width: 24, sweep: 0, warm: true },
+  finale: { count: 7, fan: 2.6, width: 24, sweep: 8, warm: false },
+};
+
+const MINT = "124,247,212";
+const AMBER = "255,198,109";
+const STAGE_ASPECT = 16 / 9;
+
+/**
+ * Spotlight choreography on the truss: one beam in the intro, beams opening through the verse and
+ * build, converging amber on the performer before the hook, fanning out in the hook, sweeping toward
+ * the audience during WAVE, and a dramatic fan-out on success. Beams move smoothly — never strobe.
+ */
+export default function StageLights({ act, finale, energy, beatPulse, accent, celebrating, reducedMotion }: StageLightsProps) {
+  const rig = finale && (act === "hook" || act === "finale") ? RIGS.finale : RIGS[act];
+  // Beams follow the section's energy (eased); the per-beat pulse lives in the backdrop, aura and floor.
+  const intensity = Math.min(1, 0.3 + 0.55 * energy + (celebrating ? 0.35 : 0) + (finale ? 0.1 : 0));
 
   return (
-    <div aria-hidden="true" className="absolute inset-0 overflow-hidden bg-[radial-gradient(ellipse_at_50%_35%,#132033_0%,#090d14_55%,#05070a_100%)]">
-      {/* LED wall */}
-      <div className="absolute inset-x-[6%] top-[8%] flex h-[52%] items-end gap-[0.8%] opacity-70">
-        {BARS.map((shape, i) => (
-          <div
-            key={i}
-            className="flex-1 rounded-t-sm"
-            style={{
-              height: `${Math.min(100, (0.25 + 0.55 * energy) * shape * 100 + (motion ? beatPulse * shape * 22 : 0))}%`,
-              background: `linear-gradient(to top, rgba(${color},${0.22 + 0.3 * energy}), rgba(${color},0))`,
-            }}
-          />
-        ))}
-      </div>
-      {/* Scanlines so the wall reads as a screen */}
-      <div className="absolute inset-x-[6%] top-[8%] h-[52%] bg-[repeating-linear-gradient(to_bottom,rgba(5,7,10,0.55)_0,rgba(5,7,10,0.55)_2px,transparent_2px,transparent_6px)]" />
-      <div className="absolute inset-x-[6%] top-[60%] h-px bg-white/10" />
-
-      {/* Truss with lamps */}
+    <div aria-hidden="true" className="absolute inset-0">
+      {/* Truss */}
       <div className="absolute inset-x-[4%] top-[3%] h-[3px] rounded-full bg-white/10" />
-      {SPOTS.map((s) => (
-        <span key={`lamp-${s.x}`} className="absolute top-[2%] size-2 -translate-x-1/2 rounded-full bg-white/70" style={{ left: `${s.x}%`, opacity: spot }} />
-      ))}
 
-      {/* Spotlights from the truss */}
-      {SPOTS.map((s) => (
-        <div
-          key={`spot-${s.x}`}
-          className={`absolute top-[3%] h-[95%] w-[26%] origin-top -translate-x-1/2 ${s.mobile ? "" : "hidden sm:block"} ${motion ? "animate-spot-sweep" : ""}`}
-          style={
-            {
-              left: `${s.x}%`,
-              "--from": `${s.from}deg`,
-              "--to": `${s.to}deg`,
-              animationDelay: `${s.delay}s`,
-              opacity: s.x === 50 ? Math.min(1, spot + 0.2 * accent) : spot * 0.75,
-              clipPath: "polygon(46% 0, 54% 0, 100% 100%, 0 100%)",
-              background: `linear-gradient(to bottom, rgba(${s.x === 50 && warm ? "255,198,109" : color},0.55), rgba(${color},0.04) 85%, transparent)`,
-              filter: "blur(2px)",
-            } as CSSProperties
-          }
-        />
-      ))}
-
-      {/* Backlight halo behind the performer */}
-      <div
-        className="absolute top-[12%] left-1/2 aspect-square h-[78%] -translate-x-1/2 rounded-full blur-2xl"
-        style={{
-          background: `radial-gradient(closest-side, rgba(${color},0.55), rgba(${color},0.12) 60%, transparent)`,
-          opacity: Math.min(1, 0.25 + 0.5 * energy + 0.35 * beatPulse + (celebrating ? 0.3 : 0)),
-        }}
-      />
-      {/* Downbeat accent: a brief warm wash */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_40%,rgba(255,198,109,0.22),transparent_60%)]" style={{ opacity: accent }} />
-
-      {/* Celebration: rays opening outward from behind the performer */}
-      {celebrating && motion && (
-        <div key={celebrationKey} className="absolute inset-0">
-          {[-50, -25, 0, 25, 50].map((a) => (
-            <div
-              key={a}
-              className="absolute bottom-[14%] left-1/2 h-[95%] w-[10%] origin-bottom animate-beam-open bg-gradient-to-t from-anticipate/60 to-transparent blur-md"
-              style={{ "--from": `${a * 0.3}deg`, "--to": `${a}deg`, marginLeft: "-5%" } as CSSProperties}
+      {TRUSS.map((x, order) => {
+        const on = order < rig.count;
+        const aimX = 50 + (x - 50) * rig.fan;
+        // Rotate the beam (pivoting at the lamp) so it lands on aimX at the floor.
+        const angle = (-Math.atan((((aimX - x) / 100) * STAGE_ASPECT) / 0.95) * 180) / Math.PI;
+        const centre = x === 50;
+        // The finale alternates gold and mint beams; elsewhere amber is kept for warm acts and accents.
+        const color = rig.warm || (centre && accent > 0.3) || (finale && order % 2 === 1) ? AMBER : MINT;
+        return (
+          <div key={x}>
+            <span
+              className="absolute top-[2%] size-2 -translate-x-1/2 rounded-full bg-white transition-opacity duration-1000"
+              style={{ left: `${x}%`, opacity: on ? 0.4 + 0.6 * intensity : 0.08 }}
             />
-          ))}
-        </div>
-      )}
-
-      {/* Haze */}
-      <div className="absolute inset-x-0 bottom-[10%] h-[35%] bg-gradient-to-t from-white/[0.05] to-transparent blur-xl" />
+            <div
+              className={`absolute top-[3%] h-[95%] origin-top -translate-x-1/2 ${order > 2 ? "hidden sm:block" : ""}`}
+              style={{
+                left: `${x}%`,
+                width: `${rig.width}%`,
+                opacity: on ? (centre ? intensity : intensity * 0.8) : 0,
+                transform: `translateX(-50%) rotate(${angle}deg)`,
+                transition: "transform 1.6s cubic-bezier(0.3, 0.7, 0.2, 1), opacity 1.2s ease, width 1.6s ease",
+              }}
+            >
+              <div
+                className={`absolute inset-0 origin-top ${!reducedMotion && rig.sweep ? "animate-beam-sweep" : ""}`}
+                style={
+                  {
+                    animationDuration: `${5 + order * 0.7}s`,
+                    animationDelay: `${-order * 1.3}s`,
+                    clipPath: "polygon(46% 0, 54% 0, 100% 100%, 0 100%)",
+                    background: `linear-gradient(to bottom, rgba(${color},0.6), rgba(${color},0.06) 80%, transparent)`,
+                    scale: rig.sweep ? `${1 + rig.sweep / 200}` : undefined,
+                  } as CSSProperties
+                }
+              />
+            </div>
+          </div>
+        );
+      })}
 
       {/* Stage floor */}
-      <div className="absolute inset-x-0 bottom-0 h-[16%] bg-gradient-to-b from-[#0c121b] to-[#06090d]" />
-      <div className="absolute inset-x-[8%] bottom-[16%] h-px" style={{ background: `linear-gradient(to right, transparent, rgba(${color},${0.4 + 0.5 * energy}), transparent)` }} />
+      <div className="absolute inset-x-0 bottom-0 h-[16%] bg-gradient-to-b from-[#0c121b] to-[#05080c]" />
       <div
-        className="absolute bottom-[9%] left-1/2 h-[12%] w-[46%] -translate-x-1/2 rounded-[50%] blur-xl"
-        style={{ background: `rgba(${color},${0.18 + 0.3 * energy + 0.2 * beatPulse})` }}
+        className="absolute inset-x-[6%] bottom-[16%] h-px transition-opacity duration-1000"
+        style={{ background: `linear-gradient(to right, transparent, rgba(${rig.warm ? AMBER : MINT},0.9), transparent)`, opacity: 0.35 + 0.6 * energy }}
+      />
+      <div
+        className="absolute bottom-[8%] left-1/2 h-[13%] -translate-x-1/2 rounded-[50%] blur-xl will-change-[opacity] transition-[width] duration-1000"
+        style={{
+          width: `${36 + 30 * energy + (finale ? 10 : 0)}%`,
+          background: `rgba(${rig.warm ? AMBER : MINT},0.62)`,
+          opacity: 0.26 + 0.45 * energy + 0.29 * beatPulse,
+        }}
       />
     </div>
   );

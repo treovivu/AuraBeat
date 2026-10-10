@@ -27,6 +27,28 @@
   --animate-shimmer: shimmer 1400ms ease-out both;
   --animate-lyric-in: lyric-in 320ms ease-out both;
   --animate-spot-sweep: spot-sweep 7s ease-in-out infinite alternate;
+  /* Virtual stage show */
+  --animate-ring-out: ring-out 6s ease-out infinite;
+  --animate-ring-in: ring-in 3.2s ease-in infinite;
+  --animate-flow-x: flow-x 26s linear infinite;
+  --animate-rise-stripes: rise-stripes 0.8s linear infinite;
+  --animate-rotate-slow: rotate-slow 48s linear infinite;
+  --animate-strip-move: strip-move 7s ease-in-out infinite alternate;
+  --animate-aurora: aurora 14s ease-in-out infinite alternate;
+  --animate-twinkle: twinkle 2.8s ease-in-out infinite alternate;
+  --animate-haze-drift: haze-drift 28s ease-in-out infinite alternate;
+  --animate-float-slow: float-slow 18s linear infinite;
+  --animate-camera-drift: camera-drift 18s ease-in-out infinite alternate;
+  --animate-aura-ring: aura-ring 1.8s cubic-bezier(0.15, 0.6, 0.3, 1) both;
+  --animate-aura-bloom: aura-bloom 2.2s cubic-bezier(0.15, 0.6, 0.3, 1) both;
+  --animate-link-draw: link-draw 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-floor-wave: floor-wave 1.8s cubic-bezier(0.15, 0.6, 0.3, 1) both;
+  --animate-beam-sweep: beam-sweep 5s ease-in-out infinite alternate;
+  /* Live Concert lightstick */
+  --animate-live-breathe: live-breathe 4s ease-in-out infinite alternate;
+  --animate-live-flash: live-flash 480ms ease-out both;
+  --animate-live-spin: live-spin 14s linear infinite;
+  --animate-live-cue: live-cue 1800ms ease-out both;
 
   @keyframes aura-drift {
     0% { transform: translate3d(-6%, -4%, 0) scale(1); }
@@ -76,6 +98,96 @@
     from { transform: translateX(-100%); opacity: 0; }
     30% { opacity: 1; }
     to { transform: translateX(100%); opacity: 0; }
+  }
+
+  @keyframes ring-out {
+    from { transform: scale(0.35); opacity: 0.55; }
+    to { transform: scale(1.5); opacity: 0; }
+  }
+  @keyframes ring-in {
+    from { transform: scale(1.5); opacity: 0; }
+    40% { opacity: 0.6; }
+    to { transform: scale(0.35); opacity: 0; }
+  }
+  @keyframes flow-x {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes rise-stripes {
+    from { transform: translateY(0); }
+    to { transform: translateY(-16px); }
+  }
+  @keyframes rotate-slow {
+    to { transform: rotate(360deg); }
+  }
+  @keyframes strip-move {
+    from { transform: translateX(-12%) skewX(-18deg); }
+    to { transform: translateX(12%) skewX(-18deg); }
+  }
+  @keyframes aurora {
+    from { transform: translateX(-6%) scaleY(0.9); }
+    to { transform: translateX(6%) scaleY(1.1); }
+  }
+  @keyframes twinkle {
+    from { opacity: 0.15; }
+    to { opacity: 1; }
+  }
+  @keyframes haze-drift {
+    from { transform: translate3d(-8%, 0, 0); }
+    to { transform: translate3d(8%, -4%, 0); }
+  }
+  @keyframes float-slow {
+    0% { transform: translate3d(0, 0, 0); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translate3d(var(--drift, 0px), -40%, 0); opacity: 0; }
+  }
+  @keyframes camera-drift {
+    from { transform: translate3d(-0.8%, 0.3%, 0); }
+    to { transform: translate3d(0.8%, -0.3%, 0); }
+  }
+  @keyframes aura-ring {
+    from { transform: scale(0.55); opacity: 0.7; }
+    to { transform: scale(1.6); opacity: 0; }
+  }
+  @keyframes aura-bloom {
+    0% { transform: scale(0.3); opacity: 0.95; }
+    60% { opacity: 0.6; }
+    100% { transform: scale(2.8); opacity: 0; }
+  }
+  @keyframes link-draw {
+    0% { transform: scaleY(0); opacity: 1; }
+    35% { transform: scaleY(1); opacity: 1; }
+    100% { transform: scaleY(1); opacity: 0; }
+  }
+  @keyframes floor-wave {
+    from { transform: translateX(-50%) scaleX(0.15); opacity: 0.9; }
+    to { transform: translateX(-50%) scaleX(1.8); opacity: 0; }
+  }
+  @keyframes beam-sweep {
+    from { transform: rotate(-7deg); }
+    to { transform: rotate(7deg); }
+  }
+
+  @keyframes live-breathe {
+    from { opacity: 0.55; }
+    to { opacity: 1; }
+  }
+
+  @keyframes live-flash {
+    from { opacity: var(--peak, 0.6); }
+    to { opacity: 0; }
+  }
+
+  @keyframes live-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes live-cue {
+    0% { opacity: 0; transform: scale(0.96); }
+    12% { opacity: 1; transform: scale(1); }
+    75% { opacity: 1; }
+    100% { opacity: 0.35; }
   }
 
   @keyframes spot-sweep {

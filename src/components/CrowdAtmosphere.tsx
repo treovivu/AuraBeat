@@ -100,6 +100,14 @@ export default memo(function CrowdAtmosphere({
   const swayAmp = reducedMotion || beat < 0 ? 0 : engaged ? 13 : mood === "peak" || mood === "finale" ? 5 : 0;
   const glow = 0.35 + 0.55 * energy;
 
+  // Stage audience: its own choreography (the page band above keeps its original behaviour).
+  const moving = !reducedMotion && beat >= 0;
+  const ocean = stage && moving && phase === "wave" && !celebrating;
+  const calm = stage && phase === "get-ready" && !celebrating;
+  const stageSway = !moving || calm ? 0 : mood === "peak" || mood === "finale" ? 8 : mood === "rising" || mood === "anticipation" ? 5 : 3;
+  /** Light ocean: a wave of raised, brighter lights travelling left → right with the music. */
+  const oceanAt = (x: number) => 0.5 + 0.5 * Math.cos(Math.PI * beat - x * 0.07);
+
   return (
     <div
       aria-hidden="true"
@@ -171,8 +179,24 @@ export default memo(function CrowdAtmosphere({
       {lit &&
         STICKS.map((stick, i) => {
           const on = litSet.has(stick);
-          const angle = swayAmp ? swayAmp * Math.cos(Math.PI * (beat + stick.phase)) : 0;
           const phone = stage && stick.rank > 0.82;
+          let angle = swayAmp ? swayAmp * Math.cos(Math.PI * (beat + stick.phase)) : 0;
+          let rise = 0;
+          let shine = 1;
+          if (stage) {
+            if (ocean) {
+              const wave = oceanAt(stick.x);
+              angle = 14 * Math.cos(Math.PI * beat - stick.x * 0.07);
+              rise = 10 * wave;
+              shine = 0.5 + 0.5 * wave;
+            } else {
+              angle = stageSway * Math.cos(Math.PI * (beat + stick.phase));
+              // Occasional hands lifting higher in energetic sections.
+              const lifting = moving && stageSway >= 5 && (Math.floor(beat / 2) + Math.round(stick.rank * 7)) % 7 === 0;
+              rise = lifting ? 9 : 0;
+              shine = calm ? 0.55 : 1;
+            }
+          }
           return (
             <div
               key={`stick-${i}`}
@@ -180,8 +204,8 @@ export default memo(function CrowdAtmosphere({
               style={{
                 left: `${stick.x}%`,
                 bottom: stage ? `calc(34% + ${stick.lift * 0.3}px)` : `calc(26% + ${stick.lift * 0.6}px)`,
-                opacity: on ? Math.min(1, glow) : 0,
-                transform: `rotate(${angle}deg)`,
+                opacity: on ? Math.min(1, glow * shine) : 0,
+                transform: `translateY(${-rise}px) rotate(${angle}deg)`,
               }}
             >
               <span
@@ -189,7 +213,12 @@ export default memo(function CrowdAtmosphere({
                 className={`block ${phone ? "h-2.5 w-1.5 rounded-[2px] bg-white/90 shadow-[0_0_8px_2px] shadow-white/50" : `rounded-full ${stick.tall ? "h-4 w-1" : "h-3 w-1"} ${
                   celebrating || stick.warm ? "bg-anticipate shadow-[0_0_10px_2px] shadow-anticipate/70" : "bg-aura shadow-[0_0_10px_2px] shadow-aura/70"
                 }`} ${celebrating && !reducedMotion ? "animate-crowd-ripple" : ""}`}
-                style={celebrating && !reducedMotion ? { animationDelay: `${stick.x * 7}ms` } : undefined}
+                style={
+                  celebrating && !reducedMotion
+                    ? // Stage: the light wave spreads from the centre outward, as if answering the performer.
+                      { animationDelay: `${stage ? Math.abs(stick.x - 50) * 14 : stick.x * 7}ms` }
+                    : undefined
+                }
               />
               {/* Raised hand holding the light (stage view) */}
               {stage && <span className="mt-0.5 block h-2.5 w-[2px] rounded-full bg-[#05070a] sm:h-7 sm:w-[3px]" />}
