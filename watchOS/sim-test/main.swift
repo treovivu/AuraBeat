@@ -1,49 +1,48 @@
-// Simulated tests for the watchOS classes, runnable on a Mac without Xcode:
-// fake wrist motion at 50 Hz, the haptic patterns, and the WebSocket link against test-server.mjs.
-// Run with ./run.sh from this folder.
+// Tests for the watchOS classes, runnable on a Mac without Xcode (WatchKit/CoreMotion are stubbed):
+// wave detection replayed on REAL recorded motion (recordings/), the haptic patterns, and the WebSocket
+// link against test-server.mjs. Run with ./run.sh from this folder.
 import Foundation
 
-
 func runLoop(for s: TimeInterval) { RunLoop.main.run(until: Date().addingTimeInterval(s)) }
-func n(_ a: Double) -> Double { Double.random(in: -a...a) }
-let tau = 2 * Double.pi
+let degToRad = Double.pi / 180
 
-func scenario(seconds: Double = 3, prepare: ((HapticManager) -> Void)? = nil, _ motion: @escaping (Double) -> CMAcceleration) -> Int {
-    let haptics = HapticManager()
-    let detector = MotionDetector(hapticManager: haptics)
+// MARK: Wave detection on real recordings
+// Each recording: 5 s of a person doing one thing (Wave Lab, phone held like a watch face, ~60 Hz).
+// Columns: t, userAccel x/y/z (g), accel incl. gravity x/y/z (g), rotation alpha/beta/gamma (°/s).
+// The watch's roll axis (y, along the forearm) corresponds to the phone's gamma.
+struct Recording: Decodable { let trial: String; let samples: [[Double]] }
+let shouldWave: Set<String> = ["wave", "gentle"]
+let folder = URL(fileURLWithPath: "recordings")
+let files = (try? FileManager.default.contentsOfDirectory(at: folder, includingPropertiesForKeys: nil))?
+    .filter { $0.pathExtension == "json" }
+    .sorted { $0.lastPathComponent < $1.lastPathComponent } ?? []
+
+print("WAVE DETECTION — replaying \(files.count) real recordings")
+var correct = 0
+for file in files {
+    guard let data = try? Data(contentsOf: file), let rec = try? JSONDecoder().decode(Recording.self, from: data) else { continue }
+    let detector = MotionDetector(hapticManager: HapticManager())
     var waves = 0
     detector.onWaveDetected = { _ in waves += 1 }
-    detector.start()
-    guard let manager = CMMotionManager.lastCreated else { return -1 }
-    prepare?(haptics)
-    let start = Date()
-    let timer = Timer(timeInterval: 1.0 / 50.0, repeats: true) { _ in manager.feed(user: motion(Date().timeIntervalSince(start))) }
-    RunLoop.main.add(timer, forMode: .common)
-    runLoop(for: seconds)
-    timer.invalidate()
-    detector.stop()
-    return waves
+    for s in rec.samples {
+        detector.process(roll: s[9] * degToRad, accelMagnitude: (s[1] * s[1] + s[2] * s[2] + s[3] * s[3]).squareRoot(), at: s[0])
+    }
+    let want = shouldWave.contains(rec.trial)
+    let ok = want ? waves > 0 : waves == 0
+    if ok { correct += 1 }
+    print("  \(ok ? "✅" : "❌") \(file.deletingPathExtension().lastPathComponent.padding(toLength: 10, withPad: " ", startingAt: 0)) waves: \(waves)  (want \(want ? ">0" : "0"))")
 }
+print("  → \(correct)/\(files.count) correct")
 
-// x = across the wrist (side-to-side), y = along the forearm, z = out of the watch face. Gravity-free (g).
-let cases: [(String, Bool, () -> Int)] = [
-    ("Resting wrist", false, { scenario { _ in CMAcceleration(x: n(0.02), y: n(0.02), z: n(0.02)) } }),
-    ("Walking", false, { scenario { t in CMAcceleration(x: n(0.05), y: 0.3 * sin(tau * 1.8 * t), z: 0.25 * sin(tau * 3.6 * t)) } }),
-    ("Brisk walking / bouncing", false, { scenario { t in CMAcceleration(x: 0.15 * sin(tau * 2 * t), y: 0.4 * sin(tau * 2 * t), z: -0.5 * abs(sin(tau * 2 * t))) } }),
-    ("Clapping (2.5 g spikes)", false, { scenario { t in CMAcceleration(x: t.truncatingRemainder(dividingBy: 0.5) < 0.04 ? 2.5 : n(0.03), y: n(0.03), z: n(0.03)) } }),
-    ("Single arm raise (one push)", false, { scenario { t in CMAcceleration(x: t > 0.5 && t < 0.8 ? 0.8 : n(0.03), y: n(0.03), z: n(0.03)) } }),
-    ("Gentle wave (0.6 g)", true, { scenario { t in CMAcceleration(x: 0.6 * sin(tau * 2 * t), y: n(0.03), z: n(0.03)) } }),
-    ("Normal wave (1.0 g)", true, { scenario { t in CMAcceleration(x: 1.0 * sin(tau * 2 * t), y: n(0.03), z: n(0.03)) } }),
-    ("Strong wave (1.6 g)", true, { scenario { t in CMAcceleration(x: 1.6 * sin(tau * 2 * t), y: n(0.05), z: n(0.05)) } }),
-    ("Strong wave while vibrating", false, { scenario(seconds: 0.5, prepare: { $0.playPattern("drop") }) { t in CMAcceleration(x: 1.6 * sin(tau * 2 * t), y: 0, z: 0) } }),
-]
-
-print("WAVE DETECTION (3 s each)")
-for (name, shouldDetect, run) in cases {
-    let waves = run()
-    let ok = shouldDetect ? waves > 0 : waves == 0
-    print("  \(ok ? "✅" : "❌") \(name.padding(toLength: 30, withPad: " ", startingAt: 0)) waves: \(waves)  (want \(shouldDetect ? ">0" : "0"))")
-}
+// Our own vibration must never count as a wave.
+let buzzing = HapticManager()
+let guarded = MotionDetector(hapticManager: buzzing)
+var guardedWaves = 0
+guarded.onWaveDetected = { _ in guardedWaves += 1 }
+buzzing.playPattern("drop")
+for i in 0..<50 { guarded.process(roll: (i / 6 % 2 == 0 ? 4 : -4), accelMagnitude: 0.2, at: Double(i) / 50) }
+print("  \(guardedWaves == 0 ? "✅" : "❌") strong wave while the watch vibrates → waves: \(guardedWaves)  (want 0)")
+runLoop(for: 0.7)
 
 print("HAPTICS")
 let haptics = HapticManager()

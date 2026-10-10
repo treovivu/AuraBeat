@@ -1,7 +1,8 @@
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig, type Plugin } from 'vite'
-import { readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { existsSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 
 type SaveRequest =
@@ -96,7 +97,59 @@ function devCalibrationSave(): Plugin {
   }
 }
 
+/**
+ * Dev-server only: Wave Lab uploads the raw motion it recorded during a trial (POST /__aurabeat/lab-recording),
+ * saved as JSON in lab-data/ (git-ignored) so detection can be tuned on real movement.
+ */
+function labRecordings(): Plugin {
+  return {
+    name: 'aurabeat-lab-recordings',
+    apply: 'serve',
+    configureServer(server) {
+      server.middlewares.use('/__aurabeat/lab-recording', (req, res) => {
+        const reply = (status: number, body: object) => {
+          res.statusCode = status
+          res.setHeader('Content-Type', 'application/json')
+          res.end(JSON.stringify(body))
+        }
+        if (req.method !== 'POST') return reply(405, { ok: false, error: 'POST only' })
+        let raw = ''
+        let tooBig = false
+        req.on('data', (chunk) => {
+          raw += chunk
+          if (raw.length > 5_000_000) tooBig = true
+        })
+        req.on('end', async () => {
+          try {
+            if (tooBig) throw new Error('Recording too large')
+            const body = JSON.parse(raw) as { trial?: unknown }
+            const trial = String(body.trial ?? 'trial').replace(/[^a-z0-9-]/gi, '')
+            const dir = path.resolve(server.config.root, 'lab-data')
+            await mkdir(dir, { recursive: true })
+            const file = `${new Date().toISOString().replace(/[:.]/g, '-')}-${trial}.json`
+            await writeFile(path.join(dir, file), raw)
+            reply(200, { ok: true, file: `lab-data/${file}` })
+          } catch (error) {
+            reply(400, { ok: false, error: error instanceof Error ? error.message : String(error) })
+          }
+        })
+      })
+    },
+  }
+}
+
+/**
+ * `npm run dev:lab`: HTTPS on the local network, so a phone can open the dev tools (e.g. Wave Lab) —
+ * phones only expose motion sensors to secure pages. Uses a self-signed certificate in .cert/
+ * (git-ignored). Plain `npm run dev` is unchanged.
+ */
+const labHttps =
+  process.env.AURABEAT_HTTPS === '1' && existsSync('.cert/key.pem') && existsSync('.cert/cert.pem')
+    ? { key: readFileSync('.cert/key.pem'), cert: readFileSync('.cert/cert.pem') }
+    : undefined
+
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), devCalibrationSave()],
+  plugins: [react(), tailwindcss(), devCalibrationSave(), labRecordings()],
+  server: labHttps ? { https: labHttps, host: true } : undefined,
 })

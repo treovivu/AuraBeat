@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:lab": "AURABEAT_HTTPS=1 vite --port 5175",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview"

@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local dev HTTPS certificate (Wave Lab on a phone)
+.cert/
+
+# Wave Lab motion recordings (local tuning data)
+lab-data/

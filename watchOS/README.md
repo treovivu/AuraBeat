@@ -1,13 +1,13 @@
 # AuraBeat — Apple Watch
 
-Based on Pramit's `PramitWatchPre` classes, with fixes found by simulated testing.
+Based on Pramit's `PramitWatchPre` classes, with fixes found by testing — wave detection tuned on real recorded motion.
 
 | File | Role |
 |---|---|
 | `MotionDetector.swift` | Detects a wrist wave |
 | `HapticManager.swift` | Plays haptic patterns |
 | `WatchWebSocketClient.swift` | Link to the AuraBeat server |
-| `sim-test/` | Simulated tests that run on a Mac without Xcode (`./sim-test/run.sh`) |
+| `sim-test/` | Tests that run on a Mac without Xcode (`./sim-test/run.sh`): real-motion replay, haptics, WebSocket |
 
 ## Message protocol (JSON over WebSocket)
 
@@ -35,26 +35,35 @@ Also accepted: `{ "pattern": "bass" }` and the web Live Concert form `{ "type": 
 
 ## What changed from `PramitWatchPre`
 
-- **Wave detection** uses `CMDeviceMotion.userAcceleration` (gravity removed) across the wrist (x axis). A wave = 3 alternating side-to-side swings within 1.2 s; each swing must last ≥ 60 ms (ignores claps); 0.6 s cooldown; movement during our own vibration is still ignored.
-  - Before: `|raw acceleration| − 1 > 0.45 g` caught bouncing and clapping, and missed normal sideways waves.
+- **Wave detection — tuned on real motion.** Recordings made with Wave Lab (a phone held like a watch face)
+  showed that people wave mostly by **rolling the wrist**, not by pushing sideways. The detector now counts
+  a *swing* when the roll rate (`rotationRate.y`, along the forearm) stays above **1.75 rad/s (100 °/s)**
+  for **60 ms**, and a *wave* after **2 alternating swings within 1.4 s** (0.6 s cooldown). While the
+  whole body bounces hard (gravity-free acceleration RMS over 0.5 s > **0.8 g**) nothing counts, and
+  movement during our own vibration is still ignored. Timing comes from each sample's `timestamp`, so it
+  works at any sensor rate.
 - **Haptics**: added `beat`, `get-ready`, `wave`, `celebrate`, `stop`; uses `strength`; `drop` uses `success` instead of `failure`.
 - **WebSocket**: `isConnected` is true only once the socket actually opens; automatic reconnect (1 s → 10 s backoff); parses all message forms above; sends `movement_detected`.
 
-## Simulated results (`./sim-test/run.sh`)
+## Results on 24 real recordings (`./sim-test/run.sh`)
 
-| Scenario | Before | After |
-|---|---|---|
-| Resting, walking, single arm raise | no wave ✅ | no wave ✅ |
-| Brisk walking / bouncing | 6 false waves ❌ | none ✅ |
-| Clapping | 7 false waves ❌ | none ✅ |
-| Gentle / normal side-to-side wave | missed ❌ | detected ✅ |
-| Strong wave | detected ✅ | detected ✅ |
-| Wave while vibrating | ignored ✅ | ignored ✅ |
+| Recorded motion | Trials | Original (`PramitWatchPre`) | Now |
+|---|---|---|---|
+| Waving | 7 | detected ✅ | detected ✅ |
+| Gentle waving | 4 | detected ✅ | detected ✅ |
+| Walking | 3 | false waves in 3/3 ❌ | none ✅ |
+| Bouncing to the beat | 2 | 10–11 false waves ❌ | none ✅ |
+| Clapping | 4 | 2–12 false waves ❌ | none ✅ |
+| Single arm raise | 3 | false waves in 2/3 ❌ | none ✅ |
+| Resting | 1 | none ✅ | none ✅ |
+
+The recordings are in `sim-test/recordings/` (5 s each, ~60 Hz, iPhone; columns listed in each file).
+Wave Lab (`wave-lab.html`, run with `npm run dev:lab`) uses the same algorithm in JavaScript to record more.
 
 ## Still to do on a real watch
 
 1. **Build in Xcode.** These files were tested on a Mac with stand-ins for WatchKit/CoreMotion; they still need a real watchOS build.
 2. **A watchOS app target**: `@main` app, a simple screen, and wiring: `WatchWebSocketClient.onHapticReceived → HapticManager.playPattern(_:strength:)`, `MotionDetector.onWaveDetected → WatchWebSocketClient.sendWaveEvent()`.
 3. **Stay awake during a show**: start an `HKWorkoutSession` or `WKExtendedRuntimeSession` so motion and haptics keep working with the wrist down.
-4. **Tune on-wrist**: `swingThreshold` (0.5 g), `swingsForWave` (3), `waveWindow` (1.2 s) are starting points from simulation.
+4. **Check on-wrist**: the settings were tuned on a hand-held phone. On the watch, confirm `rotationRate.y` is the forearm-roll axis for both wrist orientations and adjust `rotationThreshold` / `bounceGate` if needed.
 5. **Relay server** between the web app and the watch (not built yet).

@@ -1,36 +1,45 @@
 import CoreMotion
 import Foundation
 
-/// Detects a "wave with the music": the hand swinging side to side, not walking, bouncing or clapping.
+/// Detects a "wave with the music".
 ///
-/// Uses `CMDeviceMotion.userAcceleration` (gravity already removed) on the watch's x axis, which runs
-/// across the wrist. A wave is counted after `swingsForWave` alternating swings (left-right-left…)
-/// inside `waveWindow`. Each swing must stay above `swingThreshold` for `minSwingSamples` samples,
-/// so short spikes like claps are ignored. Movement while the watch is vibrating is ignored.
+/// Tuned on real recorded motion (Wave Lab): waving is mostly **wrist roll** — the forearm rotating back
+/// and forth — not a sideways push. So a swing is a sustained rotation around the device's y axis
+/// (along the forearm when worn) faster than `rotationThreshold`, and a wave is `swingsForWave`
+/// alternating swings inside `waveWindow`. While the whole body is bouncing hard (gravity-free
+/// acceleration RMS over the last 0.5 s above `bounceGate`), nothing counts. Movement caused by our own
+/// vibration is ignored.
 ///
-/// Thresholds are starting points from simulation — tune them on a real wrist.
+/// Real-motion results (24 recorded trials, phone held like a watch face): waving and gentle waving
+/// detected; walking, bouncing, clapping, a single arm raise and resting never counted.
+/// Re-check on a real wrist — the watch's axes and strap position can differ from a hand-held phone.
 class MotionDetector: ObservableObject {
     private let motionManager = CMMotionManager()
     private let hapticManager: HapticManager
 
-    /// Lateral acceleration (g, gravity removed) a swing must exceed.
-    var swingThreshold = 0.5
-    /// Consecutive samples above the threshold for a swing to count (at 50 Hz, 3 ≈ 60 ms).
-    var minSwingSamples = 3
+    /// Wrist roll speed a swing must exceed (rad/s). 1.75 rad/s ≈ 100 °/s.
+    var rotationThreshold = 1.75
+    /// How long a swing must stay above the threshold (s). Time-based, so it works at any sensor rate.
+    var minSwingDuration: TimeInterval = 0.06
     /// Alternating swings needed for one wave.
-    var swingsForWave = 3
-    /// All swings of one wave must happen within this time.
-    var waveWindow: TimeInterval = 1.2
-    /// Pause after a detected wave before the next can be reported.
+    var swingsForWave = 2
+    /// All swings of one wave must happen within this time (s).
+    var waveWindow: TimeInterval = 1.4
+    /// Pause after a detected wave before the next can be reported (s).
     var waveCooldown: TimeInterval = 0.6
+    /// No waves while gravity-free acceleration RMS over the last 0.5 s is above this (g).
+    var bounceGate = 0.8
 
     var onWaveDetected: ((TimeInterval) -> Void)?
 
-    private var aboveCount = 0
+    private let gateWindow: TimeInterval = 0.5
     private var currentSign = 0
-    private var swingTimes: [TimeInterval] = []
+    private var aboveSince: TimeInterval = 0
+    private var counted = false
     private var lastSwingSign = 0
-    private var lastWaveTime: TimeInterval = 0
+    private var swingTimes: [TimeInterval] = []
+    private var lastWaveTime: TimeInterval = -.infinity
+    private var recentAccel: [(time: TimeInterval, magnitude: Double)] = []
 
     init(hapticManager: HapticManager) {
         self.hapticManager = hapticManager
@@ -41,39 +50,56 @@ class MotionDetector: ObservableObject {
         motionManager.deviceMotionUpdateInterval = 1.0 / 50.0
         motionManager.startDeviceMotionUpdates(to: .main) { [weak self] motion, error in
             guard let self = self, let motion = motion, error == nil else { return }
-            self.process(lateral: motion.userAcceleration.x, at: ProcessInfo.processInfo.systemUptime)
+            let a = motion.userAcceleration
+            self.process(
+                roll: motion.rotationRate.y,
+                accelMagnitude: (a.x * a.x + a.y * a.y + a.z * a.z).squareRoot(),
+                at: motion.timestamp
+            )
         }
     }
 
     func stop() {
         motionManager.stopDeviceMotionUpdates()
-        reset()
+        resetSwings()
+        recentAccel.removeAll()
     }
 
-    private func reset() {
-        aboveCount = 0
+    private func resetSwings() {
         currentSign = 0
-        swingTimes.removeAll()
+        counted = false
         lastSwingSign = 0
+        swingTimes.removeAll()
     }
 
-    private func process(lateral: Double, at now: TimeInterval) {
+    /// One motion sample: roll rate (rad/s), gravity-free acceleration magnitude (g), sensor time (s).
+    func process(roll: Double, accelMagnitude: Double, at now: TimeInterval) {
         // Ignore movement caused by our own vibration.
         if hapticManager.isVibrating {
-            reset()
+            resetSwings()
             return
         }
 
-        let sign = lateral > swingThreshold ? 1 : lateral < -swingThreshold ? -1 : 0
-        if sign != 0 && sign == currentSign {
-            aboveCount += 1
-        } else {
-            currentSign = sign
-            aboveCount = sign == 0 ? 0 : 1
+        // Whole-body bounce gate.
+        recentAccel.append((now, accelMagnitude))
+        recentAccel.removeAll { now - $0.time > gateWindow }
+        let rms = (recentAccel.reduce(0) { $0 + $1.magnitude * $1.magnitude } / Double(recentAccel.count)).squareRoot()
+        if rms > bounceGate {
+            resetSwings()
+            return
         }
 
-        // A swing is a sustained push in one direction, opposite to the previous swing.
-        guard aboveCount == minSwingSamples, sign != lastSwingSign else { return }
+        let sign = roll > rotationThreshold ? 1 : roll < -rotationThreshold ? -1 : 0
+        if sign == 0 || sign != currentSign {
+            currentSign = sign
+            aboveSince = now
+            counted = false
+            return
+        }
+
+        // A swing is a sustained roll in one direction, opposite to the previous swing.
+        guard !counted, now - aboveSince >= minSwingDuration, sign != lastSwingSign else { return }
+        counted = true
         lastSwingSign = sign
         swingTimes.append(now)
         swingTimes.removeAll { now - $0 > waveWindow }

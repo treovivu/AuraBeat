@@ -15,8 +15,13 @@ final class CMAccelerometerData { let acceleration: CMAcceleration; init(_ a: CM
 final class CMDeviceMotion {
     let userAcceleration: CMAcceleration
     let gravity = CMAcceleration(x: 0, y: 0, z: -1)
-    let rotationRate = CMRotationRate()
-    init(_ user: CMAcceleration) { userAcceleration = user }
+    let rotationRate: CMRotationRate
+    let timestamp: TimeInterval
+    init(_ user: CMAcceleration, rotation: CMRotationRate = CMRotationRate(), timestamp: TimeInterval = ProcessInfo.processInfo.systemUptime) {
+        userAcceleration = user
+        rotationRate = rotation
+        self.timestamp = timestamp
+    }
 }
 
 final class CMMotionManager {
