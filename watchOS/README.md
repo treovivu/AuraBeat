@@ -39,7 +39,7 @@ Also accepted: `{ "pattern": "bass" }` and the web Live Concert form `{ "type": 
   showed that people wave mostly by **rolling the wrist**, not by pushing sideways. The detector now counts
   a *swing* when the roll rate (`rotationRate.y`, along the forearm) stays above **1.75 rad/s (100 °/s)**
   for **60 ms**, and a *wave* after **2 alternating swings within 1.4 s** (0.6 s cooldown). While the
-  whole body bounces hard (gravity-free acceleration RMS over 0.5 s > **0.8 g**) nothing counts, and
+  whole body bounces hard (gravity-free acceleration RMS over 0.5 s > **1.0 g**, raised from 0.8 after on-wrist recordings) nothing counts, and
   movement during our own vibration is still ignored. Timing comes from each sample's `timestamp`, so it
   works at any sensor rate.
 - **Haptics**: added `beat`, `get-ready`, `wave`, `celebrate`, `stop`; uses `strength`; `drop` uses `success` instead of `failure`.

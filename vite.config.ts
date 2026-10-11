@@ -215,21 +215,141 @@ const wsReadFrames = (c: WsConn): string[] => {
  *   watch → stage:  { "type": "movement_detected", "source": "watch", "timestamp": <epoch ms> }
  *   stage → watch:  { "type": "haptic", "pattern": "...", "strength": 0..1 }  |  { "type": "stop" }
  *   relay → all:    { "type": "relay-status", "watches": n, "stages": n }
+ *
+ * A physical Apple Watch can't open WebSockets (watchOS blocks low-level networking for apps that
+ * aren't streaming audio), so watches can also use HTTP long-polling with the same messages:
+ *   GET  /__aurabeat/relay/poll?id=<watch id>  → JSON array of stage → watch messages. Answers at once
+ *                                               for a new watch or queued messages, else holds ≤ 20 s.
+ *   POST /__aurabeat/relay/send                → one watch → stage message (body as above).
+ * A polling watch counts as connected until it hasn't polled for 25 s (a healthy one polls at least
+ * every 20 s). Haptics older than 1.5 s are dropped instead of delivered late in a burst, and a stop
+ * clears the haptics still waiting before it. Other messages are always delivered.
  */
 function watchRelay(): Plugin {
   type Client = WsConn & { role: 'stage' | 'watch' }
+  type Queued = { msg: { type?: string; [key: string]: unknown }; at: number }
+  type Poller = {
+    queue: Queued[]
+    res?: import('node:http').ServerResponse
+    hold?: NodeJS.Timeout
+    expiry?: NodeJS.Timeout
+  }
   const clients = new Set<Client>()
+  const pollers = new Map<string, Poller>()
+  const POLL_HOLD_MS = 20_000
+  const POLLER_EXPIRY_MS = 25_000
+  const MAX_QUEUE = 20
+  const HAPTIC_STALE_MS = 1_500
 
   const broadcastStatus = () => {
-    const watches = [...clients].filter((c) => c.role === 'watch').length
-    const stages = clients.size - watches
+    const wsWatches = [...clients].filter((c) => c.role === 'watch').length
+    const watches = wsWatches + pollers.size
+    const stages = clients.size - wsWatches
     for (const c of clients) wsSend(c, { type: 'relay-status', watches, stages })
+  }
+
+  const reply = (res: import('node:http').ServerResponse, status: number, body: unknown) => {
+    res.statusCode = status
+    res.setHeader('Content-Type', 'application/json')
+    res.setHeader('Cache-Control', 'no-store')
+    res.end(JSON.stringify(body))
+  }
+
+  /** Answers a held poll with whatever is queued. */
+  const flush = (p: Poller) => {
+    if (!p.res) return
+    clearTimeout(p.hold)
+    const res = p.res
+    p.res = undefined
+    const now = Date.now()
+    const fresh = p.queue.splice(0).filter((q) => q.msg.type !== 'haptic' || now - q.at <= HAPTIC_STALE_MS)
+    reply(res, 200, fresh.map((q) => q.msg))
+  }
+
+  const toWatches = (msg: Queued['msg']) => {
+    for (const c of clients) if (c.role === 'watch') wsSend(c, msg)
+    for (const p of pollers.values()) {
+      // A stop cancels the haptics still waiting for this watch; nothing else is discarded.
+      if (msg.type === 'stop') p.queue = p.queue.filter((q) => q.msg.type !== 'haptic')
+      p.queue.push({ msg, at: Date.now() })
+      if (p.queue.length > MAX_QUEUE) {
+        const oldestHaptic = p.queue.findIndex((q) => q.msg.type === 'haptic')
+        if (oldestHaptic >= 0) p.queue.splice(oldestHaptic, 1)
+      }
+      flush(p)
+    }
+  }
+
+  const toStages = (msg: object) => {
+    for (const c of clients) if (c.role === 'stage') wsSend(c, msg)
+  }
+
+  const handlePoll = (req: import('node:http').IncomingMessage, res: import('node:http').ServerResponse, id: string) => {
+    let p = pollers.get(id)
+    const isNew = !p
+    if (!p) {
+      p = { queue: [] }
+      pollers.set(id, p)
+    }
+    const poller = p
+    clearTimeout(poller.expiry)
+    poller.expiry = setTimeout(() => {
+      flush(poller)
+      if (pollers.get(id) === poller) {
+        pollers.delete(id)
+        broadcastStatus()
+      }
+    }, POLLER_EXPIRY_MS)
+    // A newer poll replaces a held one (e.g. the watch timed out and asked again).
+    if (poller.res) flush(poller)
+    poller.res = res
+    req.on('close', () => {
+      if (poller.res === res && !res.writableEnded) {
+        clearTimeout(poller.hold)
+        poller.res = undefined
+      }
+    })
+    if (isNew) {
+      // Answer a new watch straight away so it can show "Connected".
+      poller.queue.push({ msg: { type: 'relay-status', watches: 0, stages: 0 }, at: Date.now() })
+      broadcastStatus()
+    }
+    if (poller.queue.length) flush(poller)
+    else poller.hold = setTimeout(() => flush(poller), POLL_HOLD_MS)
   }
 
   return {
     name: 'aurabeat-watch-relay',
     apply: 'serve',
     configureServer(server) {
+      server.middlewares.use('/__aurabeat/relay/', (req, res) => {
+        const url = new URL(req.url ?? '/', 'http://relay')
+        if (url.pathname === '/poll' && req.method === 'GET') {
+          const id = url.searchParams.get('id') ?? ''
+          if (!/^[\w-]{1,64}$/.test(id)) return reply(res, 400, { ok: false, error: 'id required' })
+          return handlePoll(req, res, id)
+        }
+        if (url.pathname === '/send' && req.method === 'POST') {
+          let raw = ''
+          req.on('data', (chunk) => {
+            if (raw.length < 10_000) raw += chunk
+          })
+          req.on('end', () => {
+            let msg: { type?: string }
+            try {
+              msg = JSON.parse(raw)
+            } catch {
+              return reply(res, 400, { ok: false, error: 'invalid JSON' })
+            }
+            if (msg?.type !== 'movement_detected') return reply(res, 400, { ok: false, error: 'watches may only send movement_detected' })
+            toStages(msg)
+            reply(res, 200, { ok: true })
+          })
+          return
+        }
+        reply(res, 404, { ok: false, error: 'unknown relay route' })
+      })
+
       server.httpServer?.on('upgrade', (req, socket) => {
         const url = new URL(req.url ?? '/', 'http://relay')
         if (url.pathname !== '/__aurabeat/relay') return // leave Vite's own HMR socket alone
@@ -247,10 +367,11 @@ function watchRelay(): Plugin {
             } catch {
               continue
             }
-            const to = client.role === 'watch' ? 'stage' : 'watch'
-            const allowed = client.role === 'watch' ? msg.type === 'movement_detected' : msg.type === 'haptic' || msg.type === 'stop'
-            if (!allowed) continue
-            for (const c of clients) if (c.role === to) wsSend(c, msg)
+            if (client.role === 'watch') {
+              if (msg.type === 'movement_detected') toStages(msg)
+            } else if (msg.type === 'haptic' || msg.type === 'stop') {
+              toWatches(msg)
+            }
           }
         })
         const drop = () => {

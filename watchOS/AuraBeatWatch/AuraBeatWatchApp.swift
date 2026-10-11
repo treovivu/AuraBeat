@@ -6,8 +6,14 @@ struct AuraBeatWatchApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(client: session.client)
-                .environmentObject(session)
+            // TEMPORARY DIAGNOSTIC: page 1 is the local haptic test; swipe for the normal AuraBeat screen.
+            // Restore to just ContentView once the physical-watch haptic is confirmed.
+            TabView {
+                HapticTestView()
+                ContentView(client: session.client)
+                    .environmentObject(session)
+            }
+            .tabViewStyle(.verticalPage)
         }
     }
 }

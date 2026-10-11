@@ -15,14 +15,21 @@ export interface MovementEvent {
   timestamp: number;
 }
 
+/** Musical meanings the Live Concert sends to the watch (the watch has a haptic for each). */
+export type LiveHapticKind = "beat" | "bass" | "build" | "chorus" | "drop";
+
 export type HapticCue =
   | { type: "beat"; strength: number; downbeat: boolean }
   | { type: "get-ready" }
   | { type: "wave" }
-  | { type: "celebrate" };
+  | { type: "celebrate" }
+  /** Live Concert: the watch plays the haptic for this musical meaning. */
+  | { type: "live"; kind: LiveHapticKind; strength: number };
 
 export interface WatchTransport {
   sendHaptic(cue: HapticCue): void;
+  /** Cancels any haptic the watch is playing. */
+  stop?(): void;
 }
 
 type Listener<T> = (value: T) => void;
@@ -76,6 +83,15 @@ export function sendHaptic(cue: HapticCue) {
     return;
   }
   if (!phoneCanVibrate) return;
+  if (cue.type === "live") {
+    // Phone fallback: the same vibrations Live Concert used before it had its own watch vocabulary.
+    const { kind, strength } = cue;
+    if (kind === "beat" || kind === "bass") navigator.vibrate(Math.round((kind === "bass" ? 60 : 30) * (0.5 + strength / 2)));
+    if (kind === "build") navigator.vibrate([40, 80, 40]);
+    if (kind === "chorus") navigator.vibrate(120);
+    if (kind === "drop") navigator.vibrate([60, 40, 60, 40, 160]);
+    return;
+  }
   switch (cue.type) {
     case "beat":
       navigator.vibrate(Math.round((cue.downbeat ? 60 : 30) * (0.5 + cue.strength / 2)));
@@ -92,6 +108,8 @@ export function sendHaptic(cue: HapticCue) {
   }
 }
 
+/** Stops haptics at once: tells the watch to stop and cancels any phone vibration. */
 export function stopHaptics() {
-  if (!transport && phoneCanVibrate) navigator.vibrate(0);
+  transport?.stop?.();
+  if (phoneCanVibrate) navigator.vibrate(0);
 }

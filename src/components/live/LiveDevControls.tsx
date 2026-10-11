@@ -6,6 +6,8 @@ interface LiveDevControlsProps {
   backendConnected: boolean;
   watchMock: boolean;
   onWatchMockChange: (on: boolean) => void;
+  /** A physical watch is linked through the relay; the mock must not replace its transport. */
+  realWatchConnected: boolean;
 }
 
 const CUES: LiveCueKind[] = ["beat", "bass", "build", "chorus", "drop"];
@@ -17,7 +19,15 @@ const button = "min-h-9 rounded-lg border border-white/15 px-2 font-semibold tex
  * DEV-only mock of the live backend and the watch. Render behind `import.meta.env.DEV`.
  * Events go through the same liveBridge / watchBridge the real integrations will use.
  */
-export default function LiveDevControls({ backendConnected, watchMock, onWatchMockChange }: LiveDevControlsProps) {
+/** What the mock watch would have buzzed, for the panel. */
+const describeHaptic = (cue: HapticCue) =>
+  cue.type === "beat"
+    ? `beat ${cue.strength.toFixed(1)}${cue.downbeat ? " (strong)" : ""}`
+    : cue.type === "live"
+      ? `${cue.kind} ${cue.strength.toFixed(1)}`
+      : cue.type;
+
+export default function LiveDevControls({ backendConnected, watchMock, onWatchMockChange, realWatchConnected }: LiveDevControlsProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [autoBeat, setAutoBeat] = useState(false);
   const [bpm, setBpm] = useState(120);
@@ -38,8 +48,7 @@ export default function LiveDevControls({ backendConnected, watchMock, onWatchMo
   useEffect(() => {
     if (!watchMock) return;
     connectWatch({
-      sendHaptic: (cue: HapticCue) =>
-        setLastHaptic(`${cue.type}${cue.type === "beat" ? ` ${cue.strength.toFixed(1)}${cue.downbeat ? " (strong)" : ""}` : ""} @ ${new Date().toLocaleTimeString()}`),
+      sendHaptic: (cue: HapticCue) => setLastHaptic(`${describeHaptic(cue)} @ ${new Date().toLocaleTimeString()}`),
     });
     return () => disconnectWatch();
   }, [watchMock]);
@@ -76,10 +85,17 @@ export default function LiveDevControls({ backendConnected, watchMock, onWatchMo
         <button type="button" className={button} onClick={() => setMockBackend(!backendConnected)}>
           Backend {backendConnected ? "disconnect" : "connect"}
         </button>
-        <button type="button" className={button} onClick={() => onWatchMockChange(!watchMock)}>
+        <button
+          type="button"
+          className={`${button} disabled:opacity-40`}
+          onClick={() => onWatchMockChange(!watchMock)}
+          disabled={realWatchConnected}
+          title={realWatchConnected ? "A real watch is connected" : undefined}
+        >
           Watch {watchMock ? "disconnect" : "connect"}
         </button>
       </div>
+      {realWatchConnected && <p className="mt-1">Real watch connected: mock watch off.</p>}
       {watchMock && <p className="mt-1">Mock watch last buzz: {lastHaptic ?? "–"}</p>}
 
       <p className="mt-3 font-semibold text-ink">Live cues</p>

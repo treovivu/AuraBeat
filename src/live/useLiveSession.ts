@@ -50,6 +50,13 @@ const CELEBRATE_MS = 4000;
 /** Photosensitivity safety: never more than three light flashes per second. */
 const MIN_FLASH_GAP_MS = 334;
 
+/** The watch (or phone fallback) haptic for a live cue. */
+function playCueHaptic(cue: LiveCueKind, strength: number) {
+  // Live has its own vocabulary, so the watch plays (and shows) BASS, BUILD, CHORUS, DROP — not the
+  // At-home GET READY / WAVE prompts.
+  sendHaptic({ type: "live", kind: cue, strength });
+}
+
 /**
  * The live session: turns incoming live events into the lightstick state, the music cue on screen, and
  * watch haptics. Nothing happens until the session is started, and `stop()` ends it immediately.
@@ -84,16 +91,16 @@ export function useLiveSession(settings: LiveSettings) {
           if (event.mode === "celebrate") setTone("gold");
           return;
         }
+        if (event.type === "haptic") {
+          // Musical-onset haptics: vibration only, the lighting is left alone.
+          if (settings.watchHaptics) playCueHaptic(event.pattern, event.strength);
+          return;
+        }
         if (event.type !== "cue") return;
 
         const strength = event.strength ?? (event.cue === "beat" ? 0.6 : 1);
-        if (settings.watchHaptics) {
-          if (event.cue === "beat") sendHaptic({ type: "beat", strength, downbeat: false });
-          if (event.cue === "bass") sendHaptic({ type: "beat", strength, downbeat: true });
-          if (event.cue === "build") sendHaptic({ type: "get-ready" });
-          if (event.cue === "chorus") sendHaptic({ type: "wave" });
-          if (event.cue === "drop") sendHaptic({ type: "celebrate" });
-        }
+        // Lighting-only cues (hub pattern "none") never vibrate.
+        if (settings.watchHaptics && event.haptic !== false) playCueHaptic(event.cue, strength);
 
         if (event.cue === "build") {
           setMode("pulse");
