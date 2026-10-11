@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import ScreenHeader from "../components/ScreenHeader";
 import PerformanceMedia from "../components/PerformanceMedia";
 import AuraStage from "../components/AuraStage";
@@ -14,6 +14,7 @@ import CrowdAtmosphere from "../components/CrowdAtmosphere";
 import AuraEnergy from "../components/AuraEnergy";
 import CinematicInteraction from "../components/CinematicInteraction";
 import VirtualPerformerStage from "../components/VirtualPerformerStage";
+import { createNovaTools, NOVA_MOMENT_MS, type EnergyMode, type NovaMoment, type NovaToolHandlers, type SensoryPreference } from "../nova/tools";
 import { activePerformance, activePerformanceId, performances } from "../data/performance";
 import { beatPosition, firstBeatFromAnchor, intensityAt, sectionAt } from "../lib/beat";
 import { isHighEnergy, stageLook, visualPulse } from "../lib/stage";
@@ -61,6 +62,34 @@ function initialView(): PerformanceView {
   return "virtual";
 }
 
+/**
+ * Nova's concert energy, presentation only: which mood the stage *looks* like and how strongly it glows.
+ * The real section (timing, haptics, beat subdivision, lyrics) is never changed.
+ */
+const ENERGY_SCALE: Record<EnergyMode, number> = { calm: 0.6, immersive: 1, hype: 1.25 };
+const HYPE_MOOD: Record<SectionMood, SectionMood> = {
+  restrained: "rising",
+  cool: "peak",
+  rising: "peak",
+  anticipation: "peak",
+  peak: "finale",
+  finale: "finale",
+};
+const CALM_MOOD: Record<SectionMood, SectionMood> = {
+  restrained: "restrained",
+  cool: "cool",
+  rising: "cool",
+  anticipation: "cool",
+  peak: "cool",
+  finale: "cool",
+};
+
+/** Nova's settings names → AuraBeat's existing sensory settings. */
+const PREFERENCE_SETTING = { light: "visuals", watchHaptics: "watchHaptics", lyrics: "lyrics", reduceMotion: "reducedMotion" } as const;
+
+/** Nova's voice SDK (WebRTC) is large, so it loads only when the At-home concert opens. */
+const NovaControl = lazy(() => import("../nova/NovaControl"));
+
 /** How long the concert stays "activated" after the audience moves with the music. */
 const CELEBRATE_MS = 2600;
 /** DEV jumps land this many seconds before "Get ready", so the music leading into it is heard. */
@@ -97,8 +126,16 @@ export default function AtHomeConcert({ onExit }: AtHomeConcertProps) {
   // DEV lyric sync shows lines as they are timed, in place of the configured lyrics.
   const [previewLyrics, setPreviewLyrics] = useState<LyricLine[] | null>(null);
   const lyrics = previewLyrics ?? activePerformance.lyrics;
-  const { settings, toggle } = useSettings();
+  const { settings, toggle, set } = useSettings();
   const watchStatus = useWatchStatus();
+  // Nova (presentation only): the stage's energy and short visual moments. Never touches the clock.
+  const [energyMode, setEnergyMode] = useState<EnergyMode>("immersive");
+  const [novaMoment, setNovaMoment] = useState<NovaMoment | null>(null);
+  useEffect(() => {
+    if (!novaMoment) return;
+    const timer = window.setTimeout(() => setNovaMoment(null), NOVA_MOMENT_MS[novaMoment.kind]);
+    return () => window.clearTimeout(timer);
+  }, [novaMoment]);
   const sensesId = useId();
   const [sensesOpen, setSensesOpen] = useState(false);
   const [view, setView] = useState<PerformanceView>(initialView);
@@ -149,7 +186,17 @@ export default function AtHomeConcert({ onExit }: AtHomeConcertProps) {
   const visual = visualPulse(track, section, time, pulseOptions);
   const beatPulse = playing ? visual.value : 0;
   const pulse = beatPulse * intensity;
-  const look = stageLook(section.mood, intensity, beatPulse, visual.downbeat);
+  // What the stage looks like: the real section, unless Nova changed the energy or plays an encore.
+  const stageMood: SectionMood =
+    novaMoment?.kind === "encore"
+      ? "finale"
+      : energyMode === "hype"
+        ? HYPE_MOOD[section.mood]
+        : energyMode === "calm"
+          ? CALM_MOOD[section.mood]
+          : section.mood;
+  const stageIntensity = Math.min(1, intensity * ENERGY_SCALE[energyMode]);
+  const look = stageLook(stageMood, stageIntensity, beatPulse, visual.downbeat);
 
   // Activation after a valid wrist wave.
   const [celebration, setCelebration] = useState<number | null>(null);
@@ -160,6 +207,12 @@ export default function AtHomeConcert({ onExit }: AtHomeConcertProps) {
     return () => window.clearTimeout(timer);
   }, [celebration]);
   const celebrating = celebration !== null;
+  // Nova's moments, shown only on the stage visuals and only when no real interaction is happening.
+  const novaFree = !celebrating && promptPhase === "idle";
+  const novaBloom = novaFree && novaMoment?.kind === "bloom";
+  const stageCelebrating = celebrating || novaBloom;
+  const stageCelebrationKey = celebrating ? (celebration ?? undefined) : novaBloom ? -novaMoment.key : undefined;
+  const stagePhase = novaFree && novaMoment?.kind === "light-wave" ? "wave" : promptPhase;
 
   const [lastMovement, setLastMovement] = useState<string | null>(null);
   const ignoreReason = !settings.playAlong
@@ -216,26 +269,53 @@ export default function AtHomeConcert({ onExit }: AtHomeConcertProps) {
 
   const lightstickState: LightstickState = !settings.visuals
     ? "off"
-    : celebrating
+    : stageCelebrating
       ? "celebrate"
-      : promptPhase === "wave"
+      : stagePhase === "wave"
         ? "wave"
         : promptPhase === "get-ready"
           ? "ready"
-          : playing && isHighEnergy(section.mood)
+          : playing && isHighEnergy(stageMood)
             ? "pulse"
             : "idle";
 
   // Presentation only — derived from existing state, never used for timing decisions.
-  const energy = Math.round(Math.min(1, intensity * MOOD_ENERGY[section.mood]) * (playing ? 1 : 0.6) * 50) / 50;
+  const energy =
+    Math.round(
+      Math.min(1, Math.max(energyMode === "hype" ? 0.8 : 0, stageIntensity * MOOD_ENERGY[stageMood])) * (playing ? 1 : 0.6) * 50,
+    ) / 50;
   const crowdBeat =
     // The crowd only needs the beat while its lightsticks sway (wave, celebration, hooks).
     playing &&
     beatIndex >= 0 &&
     !settings.reducedMotion &&
-    (promptPhase === "wave" || celebrating || isHighEnergy(section.mood))
+    (stagePhase === "wave" || stageCelebrating || isHighEnergy(stageMood))
       ? beatIndex + beatPhase
       : -1;
+
+  // Nova's tools read the latest concert state through this ref, so the control never re-renders per frame.
+  const novaToolsRef = useRef<NovaToolHandlers | null>(null);
+  const novaTools = createNovaTools({
+    setEnergyMode,
+    triggerMoment: (kind) => setNovaMoment((current) => ({ kind, key: (current?.key ?? 0) + 1 })),
+    setPreference: (preference: SensoryPreference, value: boolean) => set(PREFERENCE_SETTING[preference], value),
+    status: () => ({
+      mode: "at-home",
+      isPlaying: playing,
+      currentSection: section.label,
+      positionSeconds: Math.round(time),
+      watchConnected: watchStatus === "connected",
+      energy: energyMode,
+      lyricsEnabled: settings.lyrics,
+      watchHapticsEnabled: settings.watchHaptics,
+      lightEnabled: settings.visuals,
+      reduceMotion: settings.reducedMotion,
+    }),
+  });
+  useLayoutEffect(() => {
+    novaToolsRef.current = novaTools;
+  });
+  const getNovaTools = useCallback(() => novaToolsRef.current!, []);
 
   return (
     <div
@@ -246,10 +326,10 @@ export default function AtHomeConcert({ onExit }: AtHomeConcertProps) {
     >
       {view === "video" && (
       <CrowdAtmosphere
-        mood={section.mood}
-        phase={promptPhase}
-        celebrating={celebrating}
-        celebrationKey={celebration ?? undefined}
+        mood={stageMood}
+        phase={stagePhase}
+        celebrating={stageCelebrating}
+        celebrationKey={stageCelebrationKey}
         energy={energy}
         beat={crowdBeat}
         lit={settings.visuals}
@@ -269,19 +349,19 @@ export default function AtHomeConcert({ onExit }: AtHomeConcertProps) {
           tone={promptPhase === "get-ready" ? "amber" : look.tone}
           accent={settings.visuals ? look.accent : 0}
           anticipation={settings.visuals && promptPhase === "get-ready"}
-          activated={settings.visuals && celebrating}
-          burstKey={celebration ?? undefined}
+          activated={settings.visuals && stageCelebrating}
+          burstKey={stageCelebrationKey}
           scene={
             view === "virtual" ? (
               <VirtualPerformerStage
-                mood={section.mood}
+                mood={stageMood}
                 energy={energy}
                 beatPulse={beatPulse}
                 accent={settings.visuals ? look.accent : 0}
                 beat={playing && beatIndex >= 0 ? beatIndex + beatPhase : -1}
-                phase={promptPhase}
-                celebrating={celebrating}
-                celebrationKey={celebration ?? undefined}
+                phase={stagePhase}
+                celebrating={stageCelebrating}
+                celebrationKey={stageCelebrationKey}
                 lit={settings.visuals}
                 reducedMotion={settings.reducedMotion}
               />
@@ -293,7 +373,7 @@ export default function AtHomeConcert({ onExit }: AtHomeConcertProps) {
               beatIndex={beatIndex}
               phase={beatPhase}
               intensity={intensity}
-              amber={section.mood === "anticipation"}
+              amber={stageMood === "anticipation"}
               playing={playing}
               enabled={settings.visuals}
               reducedMotion={settings.reducedMotion}
@@ -350,7 +430,7 @@ export default function AtHomeConcert({ onExit }: AtHomeConcertProps) {
         <p className="text-center text-xs font-semibold tracking-[0.3em] text-ink-muted uppercase">{section.label}</p>
         {settings.lyrics && lyrics.length > 0 && (
           <div className="mt-1">
-            <LyricsDisplay lyrics={lyrics} time={time} energetic={playing && isHighEnergy(section.mood)} />
+            <LyricsDisplay lyrics={lyrics} time={time} energetic={playing && isHighEnergy(stageMood)} />
           </div>
         )}
       </div>
@@ -361,8 +441,8 @@ export default function AtHomeConcert({ onExit }: AtHomeConcertProps) {
           <div className="absolute inset-x-0 top-12">
             <AuraEnergy
               energy={energy}
-              celebrating={celebrating}
-              celebrationKey={celebration ?? undefined}
+              celebrating={stageCelebrating}
+              celebrationKey={stageCelebrationKey}
               reducedMotion={settings.reducedMotion}
             />
           </div>
@@ -449,6 +529,9 @@ export default function AtHomeConcert({ onExit }: AtHomeConcertProps) {
               {fullscreen ? "Exit full screen" : "Full screen"}
             </button>
           )}
+          <Suspense fallback={null}>
+            <NovaControl getTools={getNovaTools} />
+          </Suspense>
           </div>
 
           {sensesOpen && (

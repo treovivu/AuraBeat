@@ -31,3 +31,6 @@ lab-data/
 .venv/
 xcuserdata/
 __pycache__/
+
+# Secrets (e.g. ELEVENLABS_API_KEY) — never commit
+.env

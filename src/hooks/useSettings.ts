@@ -52,6 +52,8 @@ export function useSettings() {
   }, [settings]);
 
   const toggle = (key: keyof SensorySettings) => setSettings((s) => ({ ...s, [key]: !s[key] }));
+  /** Sets one preference to an exact value (e.g. from Nova), rather than flipping it. */
+  const set = (key: keyof SensorySettings, value: boolean) => setSettings((s) => ({ ...s, [key]: value }));
 
-  return { settings, toggle };
+  return { settings, toggle, set };
 }

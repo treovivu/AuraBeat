@@ -6,6 +6,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import path from 'node:path'
 import { createHash, randomUUID } from 'node:crypto'
 import { createServer } from 'node:http'
+import { novaToken } from './vite.nova.ts'
 
 type SaveRequest =
   | { kind: 'beat'; file: string; bpm: number; anchor: number }
@@ -573,6 +574,6 @@ const labHttps =
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), devCalibrationSave(), labRecordings(), watchRelay(), liveLightstickHub()],
+  plugins: [react(), tailwindcss(), devCalibrationSave(), labRecordings(), watchRelay(), liveLightstickHub(), novaToken()],
   server: labHttps ? { https: labHttps, host: true } : undefined,
 })
