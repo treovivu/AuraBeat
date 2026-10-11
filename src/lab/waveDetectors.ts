@@ -29,7 +29,8 @@ export const DEFAULT_SETTINGS: FixedDetectorSettings = {
   swingsForWave: 2,
   waveWindow: 1.4,
   waveCooldown: 0.6,
-  bounceGate: 0.8,
+  // 1.0, not 0.8: a wave on a real wrist (Apple Watch) measured 0.86–1.05 g.
+  bounceGate: 1.0,
 };
 
 const GATE_WINDOW = 0.5;

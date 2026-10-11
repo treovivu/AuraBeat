@@ -10,7 +10,11 @@
  *   { "type": "audio", "status": "listening" | "lost" }
  *
  * The lightstick hub's format (see liveLightstickHub in vite.config.ts) is understood too:
- *   { "v": 1, "type": "cue", "payload": { "kind": "beat" | "bass" | "percussion" | "get_ready" | "wave" | "drop", "intensity": 0..1 } }
+ *   { "v": 1, "type": "cue", "payload": { "kind": "beat" | "bass" | "percussion" | "build" | "chorus" | "get_ready" | "wave" | "drop",
+ *                                         "intensity": 0..1, "pattern"?: "none" | … } }
+ *   { "v": 1, "type": "haptic", "payload": { "cue_id": "…", "pattern": "beat" | "bass" | "build" | "chorus" | "drop" | "none",
+ *                                            "intensity": 0..1, "duration_ms": … } }
+ * A hub cue with pattern "none" is lighting only (it never vibrates); haptic messages never change the lighting.
  */
 
 export type LiveCueKind = "beat" | "bass" | "build" | "chorus" | "drop";
@@ -19,7 +23,9 @@ export type BackendStatus = "connected" | "connecting" | "disconnected";
 export type LiveAudioStatus = "listening" | "lost" | "unknown";
 
 export type LiveEvent =
-  | { type: "cue"; cue: LiveCueKind; strength?: number }
+  | { type: "cue"; cue: LiveCueKind; strength?: number; /** False for lighting-only cues. */ haptic?: boolean }
+  /** A musical-onset haptic, separate from the lighting. */
+  | { type: "haptic"; pattern: LiveCueKind; strength: number; id?: string }
   | { type: "lightstick"; mode: LightstickMode }
   | { type: "audio"; status: Exclude<LiveAudioStatus, "unknown"> };
 
@@ -67,6 +73,8 @@ const HUB_CUES: Record<string, LiveCueKind> = {
   beat: "beat",
   percussion: "beat",
   bass: "bass",
+  build: "build",
+  chorus: "chorus",
   get_ready: "build",
   wave: "chorus",
   drop: "drop",
@@ -77,11 +85,20 @@ export function parseLiveMessage(raw: unknown): LiveEvent | null {
   if (!raw || typeof raw !== "object") return null;
   const msg = raw as Record<string, unknown>;
   if (msg.v === 1) {
-    const payload = (msg.payload ?? {}) as Record<string, unknown>;
-    const cue = msg.type === "cue" && typeof payload.kind === "string" ? HUB_CUES[payload.kind] : undefined;
+    const payload = (msg.payload && typeof msg.payload === "object" ? msg.payload : {}) as Record<string, unknown>;
+    const intensity =
+      typeof payload.intensity === "number" && Number.isFinite(payload.intensity)
+        ? Math.min(1, Math.max(0, payload.intensity))
+        : undefined;
+    if (msg.type === "haptic") {
+      // "none" is a valid hub pattern that means no vibration.
+      if (typeof payload.pattern !== "string" || !CUES.includes(payload.pattern as LiveCueKind)) return null;
+      const id = typeof payload.cue_id === "string" ? payload.cue_id : undefined;
+      return { type: "haptic", pattern: payload.pattern as LiveCueKind, strength: intensity ?? 0.5, id };
+    }
+    const cue = msg.type === "cue" && typeof payload.kind === "string" && Object.hasOwn(HUB_CUES, payload.kind) ? HUB_CUES[payload.kind] : undefined;
     if (!cue) return null;
-    const strength = typeof payload.intensity === "number" ? Math.min(1, Math.max(0, payload.intensity)) : undefined;
-    return { type: "cue", cue, strength };
+    return { type: "cue", cue, strength: intensity, haptic: payload.pattern !== "none" };
   }
   if (msg.type === "cue" && CUES.includes(msg.cue as LiveCueKind)) {
     const strength = typeof msg.strength === "number" ? Math.min(1, Math.max(0, msg.strength)) : undefined;

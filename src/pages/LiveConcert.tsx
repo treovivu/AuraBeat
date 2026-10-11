@@ -168,7 +168,12 @@ export default function LiveConcert({ onExit }: LiveConcertProps) {
       )}
 
       {import.meta.env.DEV && (
-        <LiveDevControls backendConnected={connection.backend === "connected"} watchMock={watchMock} onWatchMockChange={setWatchMock} />
+        <LiveDevControls
+          backendConnected={connection.backend === "connected"}
+          watchMock={watchMock}
+          onWatchMockChange={setWatchMock}
+          realWatchConnected={watch === "connected" && !watchMock}
+        />
       )}
     </div>
   );

@@ -656,7 +656,7 @@ def lightstick_page():
 
 # ---------------------------------------------------------------------------
 # Serve the built phone app from the same address (deployment): one HTTPS URL, and the app's
-# WebSocket is same-origin wss://. Set FRONTEND_DIST, or build into ../AuraBeat/dist.
+# WebSocket is same-origin wss://. Set FRONTEND_DIST, or `npm run build` in the repo root (../dist).
 # Mounted last, so every API route above wins.
 # ---------------------------------------------------------------------------
 
@@ -664,7 +664,9 @@ def _frontend_dist() -> Optional[Path]:
     env = os.getenv("FRONTEND_DIST")
     candidates = [Path(env)] if env else []
     root = Path(__file__).resolve().parent.parent
-    candidates += [root / "frontend_dist", root.parent / "AuraBeat" / "dist", root.parent / "frontend" / "dist"]
+    # root.parent / "dist": the frontend repo this backend lives in (backend/ sits next to package.json).
+    candidates += [root / "frontend_dist", root.parent / "dist", root.parent / "AuraBeat" / "dist",
+                   root.parent / "frontend" / "dist"]
     return next((p for p in candidates if (p / "index.html").exists()), None)
 
 

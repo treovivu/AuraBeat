@@ -28,7 +28,9 @@ class MotionDetector: ObservableObject {
     /// Pause after a detected wave before the next can be reported (s).
     var waveCooldown: TimeInterval = 0.6
     /// No waves while gravity-free acceleration RMS over the last 0.5 s is above this (g).
-    var bounceGate = 0.8
+    /// 1.0, not the phone-tuned 0.8: a wave on a real wrist measured 0.86–1.05 g, and 1.0 still rejects
+    /// every recorded walk, bounce, clap and arm raise.
+    var bounceGate = 1.0
 
     var onWaveDetected: ((TimeInterval) -> Void)?
 
@@ -74,9 +76,11 @@ class MotionDetector: ObservableObject {
 
     /// One motion sample: roll rate (rad/s), gravity-free acceleration magnitude (g), sensor time (s).
     func process(roll: Double, accelMagnitude: Double, at now: TimeInterval) {
-        // Ignore movement caused by our own vibration.
+        // Ignore movement caused by our own vibration. Only the swing in progress is dropped: swings
+        // already completed still count, or beat haptics every 0.4 s would erase every wave.
         if hapticManager.isVibrating {
-            resetSwings()
+            currentSign = 0
+            counted = false
             return
         }
 
